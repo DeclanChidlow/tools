@@ -1,0 +1,10 @@
+{
+	CNAME
+
+	feed-preview = {
+		index.html = template.ori(tools/feed-preview/index.md)
+		script.js = tools/feed-preview/script.js
+	}
+
+	index.html = index.ori()
+}

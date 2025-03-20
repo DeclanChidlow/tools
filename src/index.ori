@@ -1,0 +1,12 @@
+(tools_data) => template.ori({
+	title: "Vale's Tools"
+	description: "An assortment of handy little tools to use for a variety of purposes."
+	canonical: ""
+
+@text:`
+	<div class="readable-width">
+		<ul>
+			<li><a href="feed-preview">Feed Preview</a> - Preview an RSS, Atom, or JSON feed.</li>
+		</ul>
+	</div>
+`})
