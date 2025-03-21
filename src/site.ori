@@ -11,5 +11,11 @@
 		script.js = tools/britcss-converter/script.js
 	}
 
+	revolt-social-bio = {
+		index.html = template.ori(tools/revolt-social-bio/index.md)
+		script.js = tools/revolt-social-bio/script.js
+		style.css = tools/revolt-social-bio/style.css
+	}
+
 	index.html = index.ori()
 }

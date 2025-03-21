@@ -8,6 +8,7 @@
 		<ul>
 			<li><a href="feed-preview">Feed Preview</a> - Preview an RSS, Atom, or JSON feed.</li>
 			<li><a href="britcss-converter">BritCSS Converter</a> - Converts British spellings to functional CSS.</li>
+			<li><a href="revolt-social-bio">Revolt Social Bio</a> - Allows displaying external accounts nicely in Revolt profiles.</li>
 		</ul>
 
 		<h2>External Tools:</h2>

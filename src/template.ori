@@ -48,6 +48,8 @@
 		<link rel="stylesheet" href="https://vale.rocks/assets/styles/components/navbar.css">
 		<link rel="stylesheet" href="https://vale.rocks/assets/styles/components/footer.css">
 		<link rel="stylesheet" href="https://vale.rocks/assets/styles/components/input.css">
+
+		${ page/head ? `${ page/head}` : '' }
 	</head>
 
 	<body>
