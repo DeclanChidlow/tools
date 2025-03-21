@@ -4,11 +4,11 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-		<title>Feed Preview | Vale's Tools</title>
-		<meta property="og:title" content="Feed Preview">
+		<title>BritCSS Converter | Vale's Tools</title>
+		<meta property="og:title" content="BritCSS Converter">
 		
-			<meta name="description" content="Preview the contents of an RSS, Atom, or JSON feed.">
-			<meta property="og:description" content="Preview the contents of an RSS, Atom, or JSON feed.">
+			<meta name="description" content="Converts British spellings to functional CSS.">
+			<meta property="og:description" content="Converts British spellings to functional CSS.">
 		
 
 		
@@ -16,7 +16,7 @@
 			<meta property="og:image:alt" content="The name 'VALE' with the link 'https://vale.rocks' written under it.">
 		
 
-		<link rel="canonical" href="https://tools.vale.rocks/feed-preview">
+		<link rel="canonical" href="https://tools.vale.rocks/britcss-converter">
 
 		<meta property="og:site_name" content="Vales Tools">
 		<meta property="og:locale" content="en_AU">
@@ -57,17 +57,24 @@
 
 		<main id="main">
 			<div>
-				<h1>Feed Preview</h1>
-				<p>Preview the contents of an RSS, Atom, or JSON feed.</p>
+				<h1>BritCSS Converter</h1>
+				<p>Converts British spellings to functional CSS.</p>
 				
-<div class="input-group">
-    <input type="text" id="feed-url" placeholder="Enter RSS/Atom/JSON feed URL" />
-    <button id="load-feed">Load Feed</button>
+<div>
+    <h2>Enter British CSS:</h2>
+    <textarea id="britishCss" rows="10" cols="50">
+background-colour: black;
+colour: white;
+    </textarea>
+    <button id="convertBtn">Convert</button>
+</div>
+    
+<div>
+    <h2>Standard CSS Output:</h2>
+    <textarea id="standardCss" rows="10" cols="50" readonly></textarea>
 </div>
 
-<div id="status" class="status" style="display: none"></div>
-<div id="feed-output" class="readable"></div>
-
+<script src="https://cdn.jsdelivr.net/gh/DeclanChidlow/BritCSS/britcss.js"></script>
 <script type="module" src="script.js"></script>
 
 			</div>
