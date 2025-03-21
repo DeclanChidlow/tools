@@ -4,11 +4,11 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-		<title>BritCSS Converter | Vale's Tools</title>
-		<meta property="og:title" content="BritCSS Converter">
+		<title>Revolt Social Bio | Vale's Tools</title>
+		<meta property="og:title" content="Revolt Social Bio">
 		
-			<meta name="description" content="Converts British spellings to functional CSS.">
-			<meta property="og:description" content="Converts British spellings to functional CSS.">
+			<meta name="description" content="Allows creating badges for social media accounts on Revolt profiles.">
+			<meta property="og:description" content="Allows creating badges for social media accounts on Revolt profiles.">
 		
 
 		
@@ -16,7 +16,7 @@
 			<meta property="og:image:alt" content="The name 'VALE' with the link 'https://vale.rocks' written under it.">
 		
 
-		<link rel="canonical" href="https://tools.vale.rocks/britcss-converter">
+		<link rel="canonical" href="https://tools.vale.rocks/revolt-social-bio">
 
 		<meta property="og:site_name" content="Vales Tools">
 		<meta property="og:locale" content="en_AU">
@@ -45,7 +45,7 @@
 		<link rel="stylesheet" href="https://vale.rocks/assets/styles/components/footer.css">
 		<link rel="stylesheet" href="https://vale.rocks/assets/styles/components/input.css">
 
-		
+		<link rel='stylesheet' href='style.css'>
 	</head>
 
 	<body>
@@ -59,24 +59,22 @@
 
 		<main id="main">
 			<div>
-				<h1>BritCSS Converter</h1>
-				<p>Converts British spellings to functional CSS.</p>
+				<h1>Revolt Social Bio</h1>
+				<p>Allows creating badges for social media accounts on Revolt profiles.</p>
 				
-<div>
-    <h2>Enter British CSS:</h2>
-    <textarea id="britishCss" rows="10" cols="50">
-background-colour: black;
-colour: white;
-    </textarea>
-    <button id="convertBtn">Convert</button>
-</div>
-    
-<div>
-    <h2>Standard CSS Output:</h2>
-    <textarea id="standardCss" rows="10" cols="50" readonly></textarea>
+<div id="badge-list"></div>
+
+<button id="add-badge" class="badge-button add">Add Badge</button>
+
+<hr>
+
+<div class="badge-preview">
+    <h3>Output:</h3>
+    <pre class="badge-code" id="badge-output"></pre>
+    <button id="copy-markdown" class="copy-button">Copy Output</button>
+    <span id="copy-success" class="success-message">Copied!</span>
 </div>
 
-<script src="https://cdn.jsdelivr.net/gh/DeclanChidlow/BritCSS/britcss.js"></script>
 <script type="module" src="script.js"></script>
 
 			</div>

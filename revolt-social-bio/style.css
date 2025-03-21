@@ -1,0 +1,23 @@
+#badge-list {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.badge-form {
+	display: flex;
+	gap: 0.25rem;
+}
+
+.remove {
+	background: var(--red);
+}
+
+#add-badge,
+.copy-button {
+	margin: 1rem 0;
+}
+
+#copy-success {
+	display: none;
+}
