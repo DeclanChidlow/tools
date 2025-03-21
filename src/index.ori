@@ -7,6 +7,14 @@
 	<div class="readable-width">
 		<ul>
 			<li><a href="feed-preview">Feed Preview</a> - Preview an RSS, Atom, or JSON feed.</li>
+			<li><a href="britcss-converter">BritCSS Converter</a> - Converts British spellings to functional CSS.</li>
+		</ul>
+
+		<h2>External Tools:</h2>
+		<p>I have further handy tools hosted externally to this site.</p>
+		<ul>
+			<li><a href="https://search.vale.rocks">Search Router</a> - Allows searching across providers from a single interface with quality of life additions.</li>
+			<li><a href="https://jarg.vale.rocks">Jarg</a> - Test large language models.</li>
 		</ul>
 	</div>
 `})

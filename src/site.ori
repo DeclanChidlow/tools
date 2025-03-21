@@ -6,5 +6,10 @@
 		script.js = tools/feed-preview/script.js
 	}
 
+	britcss-converter = {
+		index.html = template.ori(tools/britcss-converter/index.md)
+		script.js = tools/britcss-converter/script.js
+	}
+
 	index.html = index.ori()
 }
