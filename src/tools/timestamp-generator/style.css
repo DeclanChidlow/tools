@@ -1,0 +1,71 @@
+.tab-container {
+	display: flex;
+	margin-bottom: 1rem;
+	gap: 1rem;
+}
+
+.tab-content {
+	display: none;
+	margin-bottom: 3rem;
+}
+
+.tab-content.active {
+	display: block;
+}
+
+.format-options {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 0.5rem;
+	margin: 1rem 0;
+}
+
+.format-option {
+	background: light-dark(oklch(from var(--white) l c h / 0.3), oklch(from var(--dark_grey) l c h / 0.3));
+	border: 0.05rem solid light-dark(transparent, var(--grey));
+	padding: 0.5rem;
+	cursor: pointer;
+	text-align: center;
+}
+
+.format-option.selected {
+	background: oklch(from var(--blue) l c h / 0.4);
+}
+
+.pattern-input {
+	margin-top: 20px;
+}
+
+.copied {
+	color: var(--success);
+	transition: opacity 0.5s;
+}
+
+.hidden {
+	display: none;
+}
+
+.flex-row {
+	display: flex;
+	gap: 10px;
+}
+
+.timezone-selector {
+	margin-bottom: 15px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+	.format-options {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	.output-container {
+		flex-direction: column;
+	}
+
+	.timestamp-output {
+		margin-right: 0;
+		margin-bottom: 10px;
+	}
+}
