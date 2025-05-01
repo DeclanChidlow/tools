@@ -18,6 +18,10 @@ document.addEventListener("DOMContentLoaded", function () {
 		{ id: "twitch", name: "Twitch", icon: ":01JPV7QHGGCRPNJC4C12X9GAJK:", urlPattern: "https://twitch.tv/" },
 		{ id: "pinterest", name: "Pinterest", icon: ":01JPV7T49MBVKM1H87X72PP9RX:", urlPattern: "https://pinterest.com/" },
 		{ id: "discord", name: "Discord", icon: ":01JPV842PMKBNGDNA0S3M278ZS:", urlPattern: "https://discord.com/users/" },
+		{ id: "instagram", name: "Instagram", icon: ":01JT5PP5J90G6WPZSBQVD7FKK0:", urlPattern: "https://www.instagram.com/" },
+		{ id: "facebook", name: "Facebook", icon: ":01JT5PR872NMQXE1T1R2RH3VF6:", urlPattern: "https://www.facebook.com/" },
+		{ id: "spotify", name: "Spotify", icon: ":01JT5Q1VYD75EGCJHZJ6FXP8W4:", urlPattern: "https://open.spotify.com/user/" },
+		{ id: "tiktok", name: "TikTok", icon: ":01JT5Q55AB2W9TC02H6M6DAQK2:", urlPattern: "https://www.tiktok.com/@" },
 	];
 
 	addBadgeButton.addEventListener("click", function () {
