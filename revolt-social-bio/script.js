@@ -84,6 +84,8 @@ document.addEventListener("DOMContentLoaded", function () {
 		const badgeItems = document.querySelectorAll(".badge-item");
 		let markdown = "";
 
+		let badges = [];
+
 		badgeItems.forEach((item) => {
 			const input = item.querySelector(".badge-input").value;
 			const platformId = item.querySelector(".badge-select").value;
@@ -100,9 +102,13 @@ document.addEventListener("DOMContentLoaded", function () {
 					url = platform.urlPattern + username;
 				}
 
-				markdown += `> ## [${platform.icon}](${url} "${platform.name}")\n`;
+				badges.push(`[${platform.icon}](${url} "${platform.name}")`);
 			}
 		});
+
+		if (badges.length > 0) {
+			markdown = "> ## " + badges.join(" ");
+		}
 
 		badgeOutput.textContent = markdown;
 	}
