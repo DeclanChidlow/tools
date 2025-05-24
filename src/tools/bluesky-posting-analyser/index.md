@@ -45,10 +45,10 @@ canonical: "/bluesky-posting-analysera"
 <div id="results" style="display: none">
 	<h2>Analysis Results</h2>
 
-    <h3>Best Days to Post</h3>
+    <h3>Most Popular Days</h3>
     <div id="dayResults"></div>
 
-    <h3>Best Hours to Post</h3>
+    <h3>Most Pouplar Hours</h3>
     <div id="hourResults"></div>
 
     <h3>Post Statistics</h3>
