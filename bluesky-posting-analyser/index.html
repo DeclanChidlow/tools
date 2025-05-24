@@ -4,11 +4,11 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-		<title>Revolt Social Bio | Vale's Tools</title>
-		<meta property="og:title" content="Revolt Social Bio">
+		<title>Bluesky Posting Analyser | Vale's Tools</title>
+		<meta property="og:title" content="Bluesky Posting Analyser">
 		
-			<meta name="description" content="Allows creating badges for social media accounts on Revolt profiles.">
-			<meta property="og:description" content="Allows creating badges for social media accounts on Revolt profiles.">
+			<meta name="description" content="Analyses Bluesky posting patterns and engagement details.">
+			<meta property="og:description" content="Analyses Bluesky posting patterns and engagement details.">
 		
 
 		
@@ -16,7 +16,7 @@
 			<meta property="og:image:alt" content="The name 'VALE' with the link 'https://vale.rocks' written under it.">
 		
 
-		<link rel="canonical" href="https://tools.vale.rocks/revolt-social-bio">
+		<link rel="canonical" href="https://tools.vale.rocks/bluesky-posting-analysera">
 
 		<meta property="og:site_name" content="Vales Tools">
 		<meta property="og:locale" content="en_AU">
@@ -46,7 +46,7 @@
 		<link rel="stylesheet" href="https://vale.rocks/assets/styles/components/input.css">
 		<link rel="stylesheet" href="https://vale.rocks/assets/styles/components/figures.css">
 
-		<link rel='stylesheet' href='style.css'>
+		
 	</head>
 
 	<body>
@@ -61,24 +61,63 @@
 		<main id="main">
 			<div>
 				<header style="margin-bottom: 3rem;">
-					<h1>Revolt Social Bio</h1>
-					<p>Allows creating badges for social media accounts on Revolt profiles.</p>
+					<h1>Bluesky Posting Analyser</h1>
+					<p>Analyses Bluesky posting patterns and engagement details.</p>
 				</header>
 				
-<div id="badge-list"></div>
+<div>
+    <h2>Authentication</h2>
+    <div>
+    	<label for="authHandle">Your Bluesky Handle:</label>
+    	<input type="text" id="authHandle" placeholder="your-handle.bsky.social"/>
+    </div>
+    <div>
+    	<label for="appPassword">App Password:</label>
+    	<input type="password" id="appPassword" placeholder="xxxx-xxxx-xxxx-xxxx" />
+    </div>
+    <button onclick="authenticate()">Login</button>
+    <div id="authStatus"></div>
 
-<button id="add-badge" class="badge-button add">Add Badge</button>
+    <h2>Settings</h2>
+    <div>
+    	<label for="targetHandle">Target Bluesky Handle:</label>
+    	<input type="text" id="targetHandle" placeholder="user.bsky.social">
+    </div>
+    <div>
+    	<label for="postLimit">Number of posts to fetch (large amount of posts can take a long time):</label>
+    	<select id="postLimit">
+    		<option value="25">25 posts</option>
+    		<option value="50">50 posts</option>
+    		<option value="100" selected>100 posts</option>
+    		<option value="200">200 posts</option>
+    		<option value="500">500 posts</option>
+    		<option value="1000">1000 posts</option>
+    	</select>
+    </div>
+    <div>
+    	<button onclick="analysePosts()" id="analyseBtn" disabled>Analyse Posts</button>
+    </div>
 
-<hr>
-
-<div class="badge-preview">
-    <h3>Output:</h3>
-    <pre class="badge-code" id="badge-output"></pre>
-    <button id="copy-markdown" class="copy-button">Copy Output</button>
-    <span id="copy-success" class="success-message">Copied!</span>
 </div>
 
-<script type="module" src="script.js"></script>
+<div id="loading" style="display: none">Loading posts...</div>
+<div id="error" style="display: none;"></div>
+
+<div id="results" style="display: none">
+	<h2>Analysis Results</h2>
+
+    <h3>Best Days to Post</h3>
+    <div id="dayResults"></div>
+
+    <h3>Best Hours to Post</h3>
+    <div id="hourResults"></div>
+
+    <h3>Post Statistics</h3>
+    <div id="stats"></div>
+
+</div>
+
+<script src="script.js"></script>
 
 			</div>
 		</main>
