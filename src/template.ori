@@ -73,6 +73,7 @@
 		</main>
 
 		<footer id="footer">
+			<p>Do you find these tools useful? Consider <a href="https://vale.rocks/support" rel="payment" class="support">sending me a tip</a>.</p>
 			<p>Made by <a href="http://vale.rocks">Declan Chidlow</a>.</p>
 		</footer>
 	</body>
