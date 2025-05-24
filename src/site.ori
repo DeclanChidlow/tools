@@ -11,6 +11,11 @@
 		script.js = tools/britcss-converter/script.js
 	}
 
+	bluesky-posting-analyser = {
+		index.html = template.ori(tools/bluesky-posting-analyser/index.md)
+		script.js = tools/bluesky-posting-analyser/script.js
+	}
+
 	revolt-social-bio = {
 		index.html = template.ori(tools/revolt-social-bio/index.md)
 		script.js = tools/revolt-social-bio/script.js
