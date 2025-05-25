@@ -23,6 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		{ id: "spotify", name: "Spotify", icon: ":01JT5Q1VYD75EGCJHZJ6FXP8W4:", urlPattern: "https://open.spotify.com/user/" },
 		{ id: "tiktok", name: "TikTok", icon: ":01JT5Q55AB2W9TC02H6M6DAQK2:", urlPattern: "https://www.tiktok.com/@" },
 		{ id: "spacehey", name: "SpaceHey", icon: ":01JW3F5GXJWSEKS3X1KX98CK0S:", urlPattern: "https://spacehey.com/profile?id=" },
+		{ id: "reddit", name: "Reddit", icon: ":01JW4XQPENHF50ZXMTQTQ7GR25:", urlPattern: "https://www.reddit.com/user/" },
 	];
 
 	addBadgeButton.addEventListener("click", function () {
