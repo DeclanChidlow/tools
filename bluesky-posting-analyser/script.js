@@ -14,7 +14,6 @@ async function authenticate() {
 	setAuthStatus("Authenticating...", "info");
 
 	try {
-		// Normalize handle
 		const identifier = handle.includes(".") ? handle : handle + ".bsky.social";
 
 		const response = await fetch("https://bsky.social/xrpc/com.atproto.server.createSession", {
@@ -76,7 +75,6 @@ async function analysePosts() {
 			return;
 		}
 
-		// Fetch engagement data for posts
 		await fetchEngagementData();
 
 		analysePostingPatterns();
@@ -90,10 +88,8 @@ async function analysePosts() {
 
 async function fetchPosts(handle) {
 	try {
-		// Normalize handle
 		const identifier = handle.includes(".") ? handle : handle + ".bsky.social";
 
-		// First, resolve the handle to get the DID
 		const resolveResponse = await fetch(`https://bsky.social/xrpc/com.atproto.identity.resolveHandle?handle=${identifier}`, {
 			headers: {
 				Authorization: `Bearer ${authToken}`,
@@ -107,14 +103,13 @@ async function fetchPosts(handle) {
 		const resolveData = await resolveResponse.json();
 		const userDid = resolveData.did;
 
-		// Get the selected post limit
 		const postLimit = parseInt(document.getElementById("postLimit").value);
 
 		// For large requests, we may need to paginate
 		postsData = [];
 		let cursor = null;
 		let fetchedCount = 0;
-		const batchSize = Math.min(postLimit, 100); // API typically limits to 100 per request
+		const batchSize = Math.min(postLimit, 100);
 
 		while (fetchedCount < postLimit) {
 			const remainingPosts = postLimit - fetchedCount;
@@ -142,7 +137,7 @@ async function fetchPosts(handle) {
 				text: record.value.text || "",
 				uri: record.uri,
 				cid: record.cid,
-				likes: 0, // Will be populated by fetchEngagementData
+				likes: 0,
 				reposts: 0,
 				replies: 0,
 			}));
@@ -153,7 +148,6 @@ async function fetchPosts(handle) {
 			// Check if there are more posts to fetch
 			if (data.cursor && fetchedCount < postLimit) {
 				cursor = data.cursor;
-				// Small delay between batches to avoid rate limiting
 				await new Promise((resolve) => setTimeout(resolve, 100));
 			} else {
 				break;
@@ -199,7 +193,6 @@ async function fetchEngagementData() {
 			}),
 		);
 
-		// Small delay between batches to avoid rate limiting
 		await new Promise((resolve) => setTimeout(resolve, 100));
 	}
 }
@@ -209,7 +202,7 @@ function analysePostingPatterns() {
 	const hourStats = {};
 	const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
-	// Initialize stats
+	// Initialise stats
 	for (let i = 0; i < 7; i++) {
 		dayStats[dayNames[i]] = { posts: 0, totalEngagement: 0, avgEngagement: 0 };
 	}
@@ -224,11 +217,9 @@ function analysePostingPatterns() {
 		const hour = date.getHours();
 		const engagement = post.likes + post.reposts + post.replies;
 
-		// Day stats
 		dayStats[dayOfWeek].posts++;
 		dayStats[dayOfWeek].totalEngagement += engagement;
 
-		// Hour stats
 		hourStats[hour].posts++;
 		hourStats[hour].totalEngagement += engagement;
 	});
@@ -279,7 +270,7 @@ function displayHourResults(hourStats) {
 	let html = '<table border="1"><tr><th>Hour</th><th>Posts</th><th>Avg Engagement</th><th>Total Engagement</th></tr>';
 
 	sortedHours.slice(0, 10).forEach(([hour, stats]) => {
-		const displayHour = parseInt(hour) === 0 ? "12 AM" : parseInt(hour) < 12 ? `${hour} AM` : parseInt(hour) === 12 ? "12 PM" : `${parseInt(hour) - 12} PM`;
+		const displayHour = `${hour.toString().padStart(2, "0")}:00`;
 
 		html += `<tr>
                     <td><strong>${displayHour}</strong></td>
