@@ -1,33 +1,9 @@
 {
-	CNAME
-
-	feed-preview = {
-		index.html = template.ori(tools/feed-preview/index.md)
-		script.js = tools/feed-preview/script.js
-	}
-
-	britcss-converter = {
-		index.html = template.ori(tools/britcss-converter/index.md)
-		script.js = tools/britcss-converter/script.js
-	}
-
-	bluesky-posting-analyser = {
-		index.html = template.ori(tools/bluesky-posting-analyser/index.md)
-		script.js = tools/bluesky-posting-analyser/script.js
-		style.css = tools/bluesky-posting-analyser/style.css
-	}
-
-	revolt-social-bio = {
-		index.html = template.ori(tools/revolt-social-bio/index.md)
-		script.js = tools/revolt-social-bio/script.js
-		style.css = tools/revolt-social-bio/style.css
-	}
-
-	timestamp-generator = {
-		index.html = template.ori(tools/timestamp-generator/index.md)
-		script.js = tools/timestamp-generator/script.js
-		style.css = tools/timestamp-generator/style.css
-	}
+	...Tree.map(tools, (toolData, toolName) => {
+		index.html: template.ori(tools/[toolName]/index.md)
+		...tools/[toolName]/script.js ? { script.js: tools/[toolName]/script.js } : {}
+		...tools/[toolName]/style.css ? { style.css: tools/[toolName]/style.css } : {}
+	})
 
 	index.html = index.ori()
 }
