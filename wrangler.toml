@@ -1,4 +1,4 @@
-name = "tools-vale-rocks"
+name = "tools"
 compatibility_date = "2025-08-11"
 workers_dev = false
 preview_urls = false
