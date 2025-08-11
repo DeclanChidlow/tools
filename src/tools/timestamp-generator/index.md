@@ -106,4 +106,4 @@ head: "<link rel='stylesheet' href='style.css'>"
     </div>
     </div>
 
-<script type="module" src="script.js"></script>
+<script type="module" src="./script.js"></script>

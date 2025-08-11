@@ -18,4 +18,4 @@ head: "<link rel='stylesheet' href='style.css'>"
     <span id="copy-success" class="success-message">Copied!</span>
 </div>
 
-<script type="module" src="script.js"></script>
+<script type="module" src="./script.js"></script>

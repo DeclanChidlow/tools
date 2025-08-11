@@ -12,4 +12,4 @@ canonical: "/feed-preview"
 <div id="status" class="status" style="display: none"></div>
 <div id="feed-output" class="readable"></div>
 
-<script type="module" src="script.js"></script>
+<script type="module" src="./script.js"></script>

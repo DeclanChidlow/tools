@@ -19,4 +19,4 @@ colour: white;
 </div>
 
 <script src="https://cdn.jsdelivr.net/gh/DeclanChidlow/BritCSS/britcss.js"></script>
-<script type="module" src="script.js"></script>
+<script type="module" src="./script.js"></script>
