@@ -10,9 +10,3 @@
 
 	index.html = index.ori()
 }
-
-
-→ (site) => {
-    ...site
-    sitemap.xml = sitemap-improver.js(Origami.sitemap(site, { base: "https://vale.rocks", assumeSlashes: true }))
-}
