@@ -1,0 +1,59 @@
+main {
+	margin-inline: auto;
+
+	header {
+		padding-block: 9rem;
+		margin-block-start: -3rem;
+		margin-block-end: 3rem;
+		text-align: center;
+		background-image:
+			radial-gradient(at 57% 41%, var(--magenta) 0px, transparent 50%), radial-gradient(at 42% 52%, var(--green) 0px, transparent 50%), radial-gradient(at 59% 58%, var(--yellow) 0px, transparent 50%);
+
+		h1 {
+			margin-block-end: 0.5rem;
+		}
+	}
+
+	ul {
+		display: grid;
+		gap: 1rem;
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+		margin: 0;
+
+		li {
+			display: flex;
+			flex-direction: column;
+			list-style: none;
+			margin: 0;
+			background: light-dark(var(--white), var(--dark_grey));
+			padding: 1rem;
+			position: relative;
+
+			a {
+				font-weight: bold;
+			}
+
+			a:focus-within {
+				outline: none;
+			}
+
+			a:focus-within::before {
+				outline: 2px solid var(--blue);
+				outline-offset: 0.25rem;
+			}
+
+			a::before {
+				content: "";
+				position: absolute;
+				inset: 0;
+				z-index: 1;
+			}
+		}
+	}
+
+	h2 {
+		text-align: center;
+		margin-block-start: 3rem;
+		margin-block-end: 1rem;
+	}
+}

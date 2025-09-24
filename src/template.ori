@@ -45,36 +45,39 @@
 		<link rel="stylesheet" href="https://vale.rocks/assets/styles/type/code.css">
 		<link rel="stylesheet" href="https://vale.rocks/assets/styles/type/links.css">
 		<link rel="stylesheet" href="https://vale.rocks/assets/styles/type/type.css">
-		<link rel="stylesheet" href="https://vale.rocks/assets/styles/components/navbar.css">
 		<link rel="stylesheet" href="https://vale.rocks/assets/styles/components/footer.css">
 		<link rel="stylesheet" href="https://vale.rocks/assets/styles/components/input.css">
 		<link rel="stylesheet" href="https://vale.rocks/assets/styles/components/figures.css">
+		<link rel="stylesheet" href="/styles.css">
+		${ page/title === "Vale's Tools" ? '<link rel="stylesheet" href="/index.css">' : `` }
 
 		${ page/head ? `${ page/head}` : '' }
 	</head>
 
 	<body>
-		<header id="navbar">
-			<div class="skip-link">Skip to <a href="#main">content</a>, <a href="#footer">footer</a></div>
+
+		${ page/title === "Vale's Tools" ? `` : `
+		<header>
 			<nav>
-				<a href="https://vale.rocks" id="navlanding">Vale</a>
-				<li><a href="/">Tools</a></li>
+				<a href="/">← View All Tools</a>
 			</nav>
 		</header>
+		`}
 
-		<main id="main">
-			<div>
-				<header style="margin-bottom: 3rem;">
-					<h1>${ page/title }</h1>
-					<p>${ page/description }</p>
-				</header>
-				${ page/_body }
-			</div>
+		<main>
+			<header>
+				<h1>${ page/title }</h1>
+				<p>${ page/description }</p>
+			</header>
+			${ page/_body }
 		</main>
 
-		<footer id="footer">
-			<p>Do you find these tools useful? Consider <a href="https://vale.rocks/support" rel="payment" class="support">sending me a tip</a>.</p>
-			<p>Made by <a href="http://vale.rocks">Declan Chidlow</a>.</p>
+		<footer>
+			<div class="support">
+				<h2>Finding these tools useful?</h2>
+				<p>Consider chipping in to support me financially <a href="https://vale.rocks/support" rel="payment">via a one-off or recurring payment</a>. It'll go a long way in helping me publish more writing, produce more tools, and develop more open-source projects. <em>Thank you!</em></p>
+			</div>
+			<p>Developed and maintained by <a href="http://vale.rocks">Declan Chidlow</a>.</p>
 		</footer>
 	</body>
 </html>`

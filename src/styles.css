@@ -1,0 +1,32 @@
+nav a {
+	position: absolute;
+	left: 0;
+	top: 0;
+	padding-inline: 1rem;
+	padding-block: 0.5rem;
+	background: var(--grey);
+	text-decoration: none;
+	font-size: 0.9rem;
+}
+
+main {
+	display: block;
+	margin-block: 3rem;
+}
+
+header {
+	margin-block-end: 4rem;
+	margin-block-start: 1rem;
+}
+
+footer .support {
+	background: light-dark(oklch(from var(--green) l c h / calc(alpha - 0.6)), oklch(from var(--green) l c h / calc(alpha - 0.8)));
+	padding-block: 0.5rem;
+	padding-inline: 1rem;
+	width: fit-content;
+	max-width: 70ch;
+
+	h2 {
+		font-size: 1rem;
+	}
+}

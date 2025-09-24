@@ -1,25 +1,41 @@
 (tools_data) => template.ori({
 	title: "Vale's Tools"
-	description: "An assortment of handy little tools to use for a variety of purposes."
+	description: "An assortment of handy little tools intended for a variety of purposes."
 	canonical: ""
 
 _body:`
-	<p>This tools site is a huge WIP. Proceed with caution.</p>
+	<ul>
+		<li>
+			<a href="feed-preview">Feed Preview</a>
+			<p>Preview RSS, Atom, or JSON feeds.</p>
+		</li>
+		<li>
+			<a href="britcss-converter">BritCSS Converter</a>
+			<p>Convert British spellings to functional CSS.</p>
+		</li>
+		<li>
+			<a href="bluesky-posting-analyser">Bluesky Posting Analyser</a>
+			<p>Analyse Bluesky posting patterns and engagement details.</p>
+		</li>
+		<li>
+			<a href="revolt-social-bio">Revolt Social Bio</a>
+			<p>Display external accounts nicely in Revolt profiles.</p>
+		</li>
+		<li>
+			<a href="timestamp-generator">Timestamp Generator</a>
+			<p>Generates timestamps ready for use on chat platforms such as Revolt and Discord.</p>
+		</li>
+	</ul>
 
-	<div class="readable-width">
-		<ul>
-			<li><a href="feed-preview">Feed Preview</a> - Preview an RSS, Atom, or JSON feed.</li>
-			<li><a href="britcss-converter">BritCSS Converter</a> - Converts British spellings to functional CSS.</li>
-			<li><a href="bluesky-posting-analyser">Bluesky Posting Analyser</a> - Analyses Bluesky posting patterns and engagement details.</li>
-			<li><a href="revolt-social-bio">Revolt Social Bio</a> - Allows displaying external accounts nicely in Revolt profiles.</li>
-			<li><a href="timestamp-generator">Timestamp Generator</a> - Generates timestamps ready for use on chat platforms such as Revolt and Discord.</li>
-		</ul>
-
-		<h2>External Tools:</h2>
-		<p>I have further handy tools hosted externally to this site.</p>
-		<ul>
-			<li><a href="https://search.vale.rocks">Search Router</a> - Allows searching across providers from a single interface with quality of life additions.</li>
-			<li><a href="https://jarg.vale.rocks">Jarg</a> - Test large language models.</li>
-		</ul>
-	</div>
+	<h2>External Tools</h2>
+	<ul>
+		<li>
+			<a href="https://search.vale.rocks">Search Router</a>
+			<p>Search across search engines from a single interface with quality of life additions.</p>
+		</li>
+		<li>
+			<a href="https://jarg.vale.rocks">Jarg</a>
+			<p>Test large language models.</p>
+		</li>
+	</ul>
 `})

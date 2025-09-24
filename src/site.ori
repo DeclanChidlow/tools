@@ -1,4 +1,7 @@
 {
+	styles.css
+	index.css
+
 	...Tree.map(tools, (toolData, toolName) => {
 		index.html: template.ori(tools/[toolName]/index.md)
 		...tools/[toolName]/script.js ? { script.js: tools/[toolName]/script.js } : {}
@@ -6,4 +9,10 @@
 	})
 
 	index.html = index.ori()
+}
+
+
+→ (site) => {
+    ...site
+    sitemap.xml = sitemap-improver.js(Origami.sitemap(site, { base: "https://vale.rocks", assumeSlashes: true }))
 }

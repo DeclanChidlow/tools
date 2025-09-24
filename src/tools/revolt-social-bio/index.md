@@ -1,5 +1,5 @@
 ---
-title: Revolt Social Bio
+title: Revolt Bio Socials
 description: Allows creating badges for social media accounts on Revolt profiles.
 canonical: "/revolt-social-bio"
 head: "<link rel='stylesheet' href='style.css'>"
