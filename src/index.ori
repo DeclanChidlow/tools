@@ -25,6 +25,11 @@ _body:`
 			<a href="timestamp-generator">Timestamp Generator</a>
 			<p>Generates timestamps ready for use on chat platforms such as Revolt and Discord.</p>
 		</li>
+
+		<li>
+			<a href="character-conserver">Character Conserver</a>
+			<p>Shrinks down the number of characters in any given text by substituting shorter equivalents.</p>
+		</li>
 	</ul>
 
 	<h2>External Tools</h2>
