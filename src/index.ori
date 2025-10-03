@@ -30,6 +30,11 @@ _body:`
 			<a href="character-conserver">Character Conserver</a>
 			<p>Shrinks down the number of characters in any given text by substituting shorter equivalents.</p>
 		</li>
+
+		<li>
+			<a href="writing-checker">Writing Checker</a>
+			<p>Grammar, spelling, and writing checker using Harper.</p>
+		</li>
 	</ul>
 
 	<h2>External Tools</h2>

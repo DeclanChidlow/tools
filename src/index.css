@@ -1,5 +1,11 @@
 main {
 	margin-inline: auto;
+
+	h2 {
+		text-align: center;
+		margin-block-start: 3rem;
+		margin-block-end: 1rem;
+	}
 }
 
 header {
@@ -91,10 +97,4 @@ ul {
 			z-index: 1;
 		}
 	}
-}
-
-h2 {
-	text-align: center;
-	margin-block-start: 3rem;
-	margin-block-end: 1rem;
 }

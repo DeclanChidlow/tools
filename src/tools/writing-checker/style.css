@@ -1,0 +1,17 @@
+main > div {
+	display: flex;
+	gap: 1rem;
+
+	> div,
+	textarea {
+		inline-size: 50%;
+	}
+}
+
+#dialect {
+	margin-block-end: 1rem;
+}
+
+#errorlist {
+	font-size: 0.9rem;
+}
