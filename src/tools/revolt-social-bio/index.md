@@ -2,7 +2,8 @@
 title: Revolt Bio Socials
 description: Allows creating badges for social media accounts on Revolt profiles.
 canonical: "/revolt-social-bio"
-head: "<link rel='stylesheet' href='./style.css'>"
+styles: true
+script: true
 ---
 
 <div id="badge-list"></div>
@@ -17,5 +18,3 @@ head: "<link rel='stylesheet' href='./style.css'>"
     <button id="copy-markdown" class="copy-button">Copy Output</button>
     <span id="copy-success" class="success-message">Copied!</span>
 </div>
-
-<script type="module" src="./script.js"></script>

@@ -2,6 +2,7 @@
 title: Feed Preview
 description: Preview the contents of an RSS, Atom, or JSON feed.
 canonical: "/feed-preview"
+script: true
 ---
 
 <div class="input-group">
@@ -11,5 +12,3 @@ canonical: "/feed-preview"
 
 <div id="status" class="status" style="display: none"></div>
 <div id="feed-output" class="readable"></div>
-
-<script type="module" src="./script.js"></script>

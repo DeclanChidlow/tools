@@ -2,6 +2,7 @@
 title: Character Conserver
 description: Shrinks down the number of characters in any given text by substituting shorter equivalents. 
 canonical: "./character-conserver"
+script: true
 ---
 
 <label for="originalText">Original Text:</label><br>
@@ -16,5 +17,3 @@ canonical: "./character-conserver"
 <textarea id="shortenedText" rows="6" cols="60" readonly></textarea>
 
 <div id="stats"></div>
-
-<script type="module" src="./script.js"></script>
