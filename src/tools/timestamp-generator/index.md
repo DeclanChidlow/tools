@@ -1,6 +1,6 @@
 ---
 title: Timestamp Generator
-description: Generates timestamps ready for use on chat platforms such as Revolt and Discord.
+description: Generates timestamps ready for use on chat platforms such as Stoat and Discord.
 canonical: "/timestamp-generator"
 head: "<link rel='stylesheet' href='style.css'>"
 ---
@@ -86,7 +86,7 @@ head: "<link rel='stylesheet' href='style.css'>"
         </div>
     </div>
 
-    <h3>Revolt/Discord Timestamp</h3>
+    <h3>Stoat/Discord Timestamp</h3>
     <div class="output-container">
         <pre class="timestamp-output" id="discord-output"></pre>
         <button class="copy-btn" id="discord-copy-btn">Copy</button>
