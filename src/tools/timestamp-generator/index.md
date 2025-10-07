@@ -2,7 +2,7 @@
 title: Timestamp Generator
 description: Generates timestamps ready for use on chat platforms such as Stoat and Discord.
 canonical: "/timestamp-generator"
-head: "<link rel='stylesheet' href='style.css'>"
+head: "<link rel='stylesheet' href='./style.css'>"
 ---
 
 <div class="tab-container">
@@ -106,4 +106,4 @@ head: "<link rel='stylesheet' href='style.css'>"
     </div>
     </div>
 
-<script type="module" src="/timestamp-generator/script.js"></script>
+<script type="module" src="./script.js"></script>

@@ -2,7 +2,7 @@
 title: Bluesky Posting Analyser
 description: Analyses Bluesky posting patterns and engagement details.
 canonical: "/bluesky-posting-analyser"
-head: "<link rel='stylesheet' href='style.css'>"
+head: "<link rel='stylesheet' href='./style.css'>"
 ---
 
 <div>

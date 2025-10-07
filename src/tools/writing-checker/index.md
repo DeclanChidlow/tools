@@ -2,7 +2,7 @@
 title: Writing Checker
 description: Grammar, spelling, and writing checking using Harper.
 canonical: "/writing-checker"
-head: "<link rel='stylesheet' href='style.css'>"
+head: "<link rel='stylesheet' href='./style.css'>"
 ---
 
 <label for="dialect">English Dialect:</label>
