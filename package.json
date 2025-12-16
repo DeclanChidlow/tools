@@ -2,7 +2,7 @@
 	"name": "vales-tools",
 	"type": "module",
 	"dependencies": {
-		"@weborigami/origami": "^0.5.1"
+		"@weborigami/origami": "^0.6.3"
 	},
 	"scripts": {
 		"dev": "ori serve watch src, =debug src/site.ori",
