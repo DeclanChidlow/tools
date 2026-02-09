@@ -19,19 +19,23 @@ document.addEventListener("DOMContentLoaded", function () {
 		showStatus("Loading feed...", "loading");
 		feedOutput.innerHTML = "";
 
-		const proxyUrl = "https://api.allorigins.win/raw?url=";
-		const encodedUrl = encodeURIComponent(url);
-
-		fetch(proxyUrl + encodedUrl)
+		fetch(url)
 			.then((response) => {
-				if (!response.ok) throw new Error("Network response was not ok");
+				if (!response.ok) {
+					throw new Error(`HTTP error! status: ${response.status}`);
+				}
 				return response.text();
 			})
 			.then((text) => {
 				parseFeed(text, url);
 			})
 			.catch((error) => {
-				showStatus("Error loading feed: " + error.message, "error");
+				if (error.name === "TypeError") {
+					showStatus("CORS Error: The requested feed does not allow direct access from other domains. Please ensure the server has proper CORS headers open.", "error");
+				} else {
+					showStatus("Error loading feed: " + error.message, "error");
+				}
+				console.error("Fetch error:", error);
 			});
 	}
 
@@ -43,19 +47,16 @@ document.addEventListener("DOMContentLoaded", function () {
 					displayJsonFeed(jsonFeed);
 					return;
 				}
-			} catch (e) {
-			}
+			} catch (e) {}
 
 			const parser = new DOMParser();
 			const xmlDoc = parser.parseFromString(text, "text/xml");
 
 			if (xmlDoc.getElementsByTagName("rss").length > 0) {
 				displayRssFeed(xmlDoc);
-			}
-			else if (xmlDoc.getElementsByTagName("feed").length > 0) {
+			} else if (xmlDoc.getElementsByTagName("feed").length > 0) {
 				displayAtomFeed(xmlDoc);
-			}
-			else if (xmlDoc.getElementsByTagName("rdf:RDF").length > 0) {
+			} else if (xmlDoc.getElementsByTagName("rdf:RDF").length > 0) {
 				displayRdfFeed(xmlDoc);
 			} else {
 				showStatus("Unsupported feed format", "error");
