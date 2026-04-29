@@ -1,0 +1,18 @@
+.controls > div {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem;
+}
+
+.post-block {
+	margin-block: 2rem;
+
+	h2 {
+		font-size: 1.5rem;
+	}
+}
+
+textarea {
+	block-size: 10rem;
+	font-size: 0.9rem;
+}

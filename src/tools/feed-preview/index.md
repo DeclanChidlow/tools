@@ -1,8 +1,6 @@
 ---
 title: Feed Preview
 description: Preview the contents of an RSS, Atom, or JSON feed.
-canonical: "/feed-preview"
-script: true
 ---
 
 <div class="input-group">

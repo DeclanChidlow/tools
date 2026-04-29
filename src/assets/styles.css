@@ -1,0 +1,41 @@
+nav a {
+	position: absolute;
+	left: 0;
+	top: 0;
+	padding-inline: 1rem;
+	padding-block: 0.5rem;
+	background: light-dark(var(--white), var(--grey));
+	text-decoration: none;
+	font-size: 0.9rem;
+}
+
+main {
+	display: block;
+	margin-block: 3rem;
+}
+
+header {
+	margin-block-end: 4rem;
+	margin-block-start: 1rem;
+}
+
+footer {
+	.support,
+	p {
+		margin-inline: auto;
+	}
+
+	.support {
+		background: light-dark(oklch(from var(--green) l c h / calc(alpha - 0.6)), oklch(from var(--green) l c h / calc(alpha - 0.8)));
+		padding: 1.5rem;
+		width: fit-content;
+		max-width: 70ch;
+
+		h2 {
+			display: block;
+			font-size: 1rem;
+			margin-block-end: 0.5rem;
+			text-align: center;
+		}
+	}
+}

@@ -1,0 +1,113 @@
+main {
+	margin-inline: auto;
+
+	h2 {
+		text-align: center;
+		margin-block-start: 3rem;
+		margin-block-end: 1rem;
+	}
+}
+
+header {
+	padding-block-start: 13rem;
+	padding-block-end: 8rem;
+	padding-inline: 3.5rem;
+	margin-block-start: -3rem;
+	margin-block-end: 3rem;
+	text-align: center;
+
+	h1 {
+		display: block;
+		margin-block-end: 0.5rem;
+	}
+
+	&::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		block-size: 35rem;
+		--s: 20rem;
+		--_g: #0000 90deg, light-dark(var(--white), var(--grey)) 0;
+		background: conic-gradient(from 90deg at 4px 4px, var(--_g)), conic-gradient(from 90deg at 4px 4px, var(--_g)), transparent;
+		background-size:
+			var(--s) var(--s),
+			calc(var(--s) / 5) calc(var(--s) / 5);
+		mask-image: linear-gradient(black, transparent);
+		z-index: -1;
+	}
+
+	&::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		block-size: 30rem;
+		background: linear-gradient(to right, var(--magenta), var(--red), var(--orange), var(--yellow), var(--green), var(--blue), var(--cyan));
+		mask-image: linear-gradient(black, transparent);
+		mix-blend-mode: darken;
+
+		@media (prefers-color-scheme: dark) {
+			mix-blend-mode: lighten;
+		}
+	}
+}
+
+.external-tools {
+	h2 {
+		margin-block-start: 8rem;
+		margin-block-end: 0.5rem;
+	}
+
+	p {
+		margin-block: 1rem;
+	}
+
+	span {
+		margin-block-start: 0;
+		font-size: 0.8rem;
+		font-style: italic;
+	}
+}
+
+ul {
+	display: grid;
+	gap: 1.5rem;
+	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+	margin: 0;
+
+	li {
+		display: flex;
+		flex-direction: column;
+		list-style: none;
+		margin: 0;
+		background: light-dark(var(--white), var(--dark_grey));
+		padding: 1.5rem;
+		position: relative;
+
+		a {
+			font-weight: bold;
+		}
+
+		a:focus-within {
+			outline: none;
+		}
+
+		a:focus-within::before {
+			outline: 2px solid var(--blue);
+			outline-offset: 0.25rem;
+		}
+
+		a::before {
+			content: "";
+			position: absolute;
+			inset: 0;
+			z-index: 1;
+		}
+	}
+}
+
+.other-links {
+	margin-block-start: 8rem;
+	margin-inline: -1rem;
+	text-align: center;
+	font-style: italic;
+}

@@ -14,13 +14,13 @@
 		<link rel="stylesheet" href="https://vale.rocks/assets/styles/components/footer.css">
 		<link rel="stylesheet" href="https://vale.rocks/assets/styles/components/input.css">
 		<link rel="stylesheet" href="https://vale.rocks/assets/styles/components/figures.css">
-		<link rel="stylesheet" href="/styles.css">
-		${ page/title === "Vale's Tools" ? '<link rel="stylesheet" href="/index.css">' : `` }
+		<link rel="stylesheet" href="/assets/styles.css">
+		${ page/title === "Vale's Tools" ? '<link rel="stylesheet" href="/assets/index.css">' : `` }
 		${ page/styles ? `<link rel="stylesheet" href="${ page.canonical }/style.css">` : `` }
 
-		<link rel="preload" href="https://vale.rocks/assets/typefaces/WorkSans.woff2" as="font" type="font/woff2">
-		<link rel="preload" href="https://vale.rocks/assets/typefaces/WorkSans-Italic.woff2" as="font" type="font/woff2">
-		<link rel="preload" href="https://vale.rocks/assets/typefaces/FiraCode.woff2" as="font" type="font/woff2">
+		<link rel="preload" href="/assets/typefaces/WorkSans.woff2" as="font" type="font/woff2">
+		<link rel="preload" href="/assets/typefaces/WorkSans-Italic.woff2" as="font" type="font/woff2">
+		<link rel="preload" href="/assets/typefaces/FiraCode.woff2" as="font" type="font/woff2">
 
 		<meta property="og:title" content="${ page/title }">
 		${ page/description ? `

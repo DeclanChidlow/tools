@@ -1,9 +1,6 @@
 ---
 title: Bluesky Posting Analyser
 description: Analyses Bluesky posting patterns and engagement details.
-canonical: "/bluesky-posting-analyser"
-styles: true
-script: true
 ---
 
 <div>

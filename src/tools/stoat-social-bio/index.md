@@ -1,9 +1,6 @@
 ---
-title: Revolt Bio Socials
-description: Allows creating badges for social media accounts on Revolt profiles.
-canonical: "/revolt-social-bio"
-styles: true
-script: true
+title: Stoat Bio Socials
+description: Allows creating badges for social media accounts on Stoat profiles.
 ---
 
 <div id="badge-list"></div>

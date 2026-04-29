@@ -4,48 +4,30 @@
 	canonical: ""
 
 _body:`
-	<ul>
-		<li>
-			<a href="feed-preview">Feed Preview</a>
-			<p>Preview RSS, Atom, or JSON feeds.</p>
-		</li>
-		<li>
-			<a href="britcss-converter">BritCSS Converter</a>
-			<p>Convert British spellings to functional CSS.</p>
-		</li>
-		<li>
-			<a href="bluesky-posting-analyser">Bluesky Posting Analyser</a>
-			<p>Analyse Bluesky posting patterns and engagement details.</p>
-		</li>
-		<li>
-			<a href="revolt-social-bio">Revolt Social Bio</a>
-			<p>Display external accounts nicely in Revolt profiles.</p>
-		</li>
-		<li>
-			<a href="timestamp-generator">Timestamp Generator</a>
-			<p>Generates timestamps ready for use on chat platforms such as Stoat and Discord.</p>
-		</li>
+	<section>
+		<ul>
+			${ Tree.map(tools, (toolData, toolName) => toolData/index.md ? `
+			<li>
+				<a href="/${ toolName }">${ toolData/index.md/title }</a>
+				<p>${ toolData/index.md/description }</p>
+			</li>
+			` : "") }
+		</ul>
+	</section>
 
-		<li>
-			<a href="character-conserver">Character Conserver</a>
-			<p>Shrinks down the number of characters in any given text by substituting shorter equivalents.</p>
-		</li>
+	<section class="external-tools">
+		<h2>External Tools</h2>
+		<p>Tools not directly upon this site, but which I have created and are indeed located somewhere.</p>
+		<ul>
+			${ tools/external-tools.yaml → (_) => Tree.map(_, (tool) =>	`
+			<li>
+					<a href="https://${ tool.url }">${ tool.title }</a>
+					<span>${ tool.url }</span>
+					<p>${ tool.description }</p>
+			</li>
+			`) }
+		</ul>
+	</section>
 
-		<li>
-			<a href="writing-checker">Writing Checker</a>
-			<p>Grammar, spelling, and writing checker using Harper.</p>
-		</li>
-	</ul>
-
-	<h2>External Tools</h2>
-	<ul>
-		<li>
-			<a href="https://search.vale.rocks">Search Router</a>
-			<p>Search across search engines from a single interface with quality of life additions.</p>
-		</li>
-		<li>
-			<a href="https://jarg.vale.rocks">Jarg</a>
-			<p>Test large language models.</p>
-		</li>
-	</ul>
+	<p class="other-links">I have also compiled a collection of valuable <a href="https://vale.rocks/links/tools-and-resources">tools and resources made by other people</a>.</p>
 `})

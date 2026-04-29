@@ -1,9 +1,6 @@
 ---
 title: Timestamp Generator
 description: Generates timestamps ready for use on chat platforms such as Stoat and Discord.
-canonical: "/timestamp-generator"
-styles: true
-script: true
 ---
 
 <div class="tab-container">
@@ -89,9 +86,9 @@ script: true
 
     <h3>Stoat/Discord Timestamp</h3>
     <div class="output-container">
-        <pre class="timestamp-output" id="discord-output"></pre>
-        <button class="copy-btn" id="discord-copy-btn">Copy</button>
-        <span class="copied hidden" id="discord-copied">Copied!</span>
+        <pre class="timestamp-output" id="platform-output"></pre>
+        <button class="copy-btn" id="platform-copy-btn">Copy</button>
+        <span class="copied hidden" id="platform-copied">Copied!</span>
     </div>
 
     <h3>ISO 8601 Format</h3>

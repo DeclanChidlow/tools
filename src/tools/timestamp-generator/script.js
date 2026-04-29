@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	const tabContents = document.querySelectorAll(".tab-content");
 	const formatOptions = document.querySelectorAll(".format-option");
 	const outputSection = document.getElementById("output-section");
-	const discordOutput = document.getElementById("discord-output");
+	const platformOutput = document.getElementById("platform-output");
 	const isoOutput = document.getElementById("iso-output");
 	const previewContent = document.getElementById("preview-content");
 
@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	const isoGenerateBtn = document.getElementById("iso-generate-btn");
 
 	// Copy buttons
-	const discordCopyBtn = document.getElementById("discord-copy-btn");
+	const platformCopyBtn = document.getElementById("platform-copy-btn");
 	const isoCopyBtn = document.getElementById("iso-copy-btn");
 
 	// Set default date and time
@@ -97,8 +97,8 @@ document.addEventListener("DOMContentLoaded", function () {
 	});
 
 	// Copy buttons
-	discordCopyBtn.addEventListener("click", () => {
-		copyToClipboard(discordOutput.textContent, "discord-copied");
+	platformCopyBtn.addEventListener("click", () => {
+		copyToClipboard(platformOutput.textContent, "platform-copied");
 	});
 
 	isoCopyBtn.addEventListener("click", () => {
@@ -305,8 +305,8 @@ document.addEventListener("DOMContentLoaded", function () {
 	function displayOutputs(timestamp) {
 		const selectedFormat = document.querySelector(".format-option.selected").getAttribute("data-format");
 
-		// Display discord format
-		discordOutput.textContent = `<t:${timestamp}:${selectedFormat}>`;
+		// Display platform format
+		platformOutput.textContent = `<t:${timestamp}:${selectedFormat}>`;
 
 		// Display ISO format
 		const isoDate = new Date(timestamp * 1000).toISOString();
@@ -320,14 +320,14 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 	function updateOutputs() {
-		const discordText = discordOutput.textContent;
-		if (!discordText) return;
+		const platformText = platformOutput.textContent;
+		if (!platformText) return;
 
-		const timestamp = parseInt(discordText.match(/<t:(\d+):/)[1], 10);
+		const timestamp = parseInt(platformText.match(/<t:(\d+):/)[1], 10);
 		const selectedFormat = document.querySelector(".format-option.selected").getAttribute("data-format");
 
-		// Update discord output
-		discordOutput.textContent = `<t:${timestamp}:${selectedFormat}>`;
+		// Update platform output
+		platformOutput.textContent = `<t:${timestamp}:${selectedFormat}>`;
 
 		// Update preview
 		updatePreview(timestamp, selectedFormat);

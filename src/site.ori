@@ -1,11 +1,16 @@
 {
-	styles.css
-	index.css
+	assets
 
 	...Tree.map(tools, (toolData, toolName) => {
-		index.html: template.ori(tools/[toolName]/index.md)
-		...tools/[toolName]/script.js ? { script.js: tools/[toolName]/script.js } : {}
-		...tools/[toolName]/style.css ? { style.css: tools/[toolName]/style.css } : {}
+		index.html: template.ori({
+			...toolData/index.md
+			canonical: `/${ toolName }`
+			script: toolData/script.js
+			styles: toolData/style.css
+		})
+
+		...toolData/script.js ? { script.js: toolData/script.js } : {}
+		...toolData/style.css ? { style.css: toolData/style.css } : {}
 	})
 
 	index.html = index.ori()

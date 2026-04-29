@@ -1,8 +1,6 @@
 ---
 title: BritCSS Converter
 description: Converts British spellings to functional CSS.
-canonical: "/britcss-converter"
-script: true
 ---
 
 <div>
