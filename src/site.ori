@@ -13,5 +13,14 @@
 		...toolData/style.css ? { style.css: toolData/style.css } : {}
 	})
 
+	tools.json = Tree.json(
+    Tree.map(tools, (toolData, toolName) =>
+      toolData/index.md ? {
+        title: toolData/index.md/title
+        description: toolData/index.md/description
+      } : undefined
+    )
+  )
+
 	index.html = index.ori()
 }

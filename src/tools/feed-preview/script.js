@@ -1,295 +1,159 @@
-document.addEventListener("DOMContentLoaded", function () {
-	const feedUrlInput = document.getElementById("feed-url");
-	const loadFeedButton = document.getElementById("load-feed");
-	const feedOutput = document.getElementById("feed-output");
-	const statusDiv = document.getElementById("status");
+(function () {
+	const formatSize = (bytes) => {
+		if (!bytes || bytes === 0) return "Unknown";
+		const units = ["B", "KB", "MB", "GB"];
+		const i = Math.floor(Math.log(bytes) / Math.log(1024));
+		return `${parseFloat((bytes / Math.pow(1024, i)).toFixed(2))} ${units[i]}`;
+	};
 
-	loadFeedButton.addEventListener("click", function () {
-		const feedUrl = feedUrlInput.value.trim();
+	const parseXML = (text) => {
+		const parser = new DOMParser();
+		const xml = parser.parseFromString(text, "text/xml");
+		const parseError = xml.querySelector("parsererror");
+		if (parseError) throw new Error("Invalid XML format.");
 
-		if (!feedUrl) {
-			showStatus("Please enter a feed URL", "error");
-			return;
-		}
+		const isRSS = xml.querySelector("rss") !== null;
+		const isAtom = xml.querySelector("feed") !== null;
 
-		loadFeed(feedUrl);
-	});
+		let type = "Unknown XML";
+		if (isRSS) type = "RSS";
+		if (isAtom) type = "Atom";
 
-	function loadFeed(url) {
-		showStatus("Loading feed...", "loading");
-		feedOutput.innerHTML = "";
+		const hasAudio = xml.querySelector('enclosure[type^="audio/"]') !== null;
+		const hasItunes = xml.querySelector("*|summary, *|author") !== null;
 
-		fetch(url)
-			.then((response) => {
-				if (!response.ok) {
-					throw new Error(`HTTP error! status: ${response.status}`);
-				}
-				return response.text();
-			})
-			.then((text) => {
-				parseFeed(text, url);
-			})
-			.catch((error) => {
-				if (error.name === "TypeError") {
-					showStatus("CORS Error: The requested feed does not allow direct access from other domains. Please ensure the server has proper CORS headers open.", "error");
-				} else {
-					showStatus("Error loading feed: " + error.message, "error");
-				}
-				console.error("Fetch error:", error);
+		const items = [];
+		if (isRSS) {
+			xml.querySelectorAll("item").forEach((el) => {
+				const link = el.querySelector("link")?.textContent;
+				const guid = el.querySelector("guid")?.textContent;
+				const isLinkExternal = guid && guid.startsWith("http") && guid !== link;
+
+				items.push({
+					title: el.querySelector("title")?.textContent || "Untitled",
+					url: isLinkExternal ? guid : link,
+					external_url: isLinkExternal ? link : null,
+					content: el.querySelector("description")?.textContent || "No description provided.",
+					date: el.querySelector("pubDate")?.textContent,
+				});
 			});
-	}
+		} else if (isAtom) {
+			xml.querySelectorAll("entry").forEach((el) => {
+				const link = el.querySelector("link[rel='alternate']")?.getAttribute("href") || el.querySelector("link")?.getAttribute("href");
+				const related = el.querySelector("link[rel='related']")?.getAttribute("href");
 
-	function parseFeed(text) {
-		try {
+				items.push({
+					title: el.querySelector("title")?.textContent || "Untitled",
+					url: link,
+					external_url: related,
+					content: el.querySelector("content")?.textContent || el.querySelector("summary")?.textContent || "No content.",
+					date: el.querySelector("updated")?.textContent,
+				});
+			});
+		}
+
+		return { type, isPodcast: hasAudio || hasItunes, items };
+	};
+
+	const parseJSON = (text) => {
+		const json = JSON.parse(text);
+		if (json.version?.includes("jsonfeed")) {
+			const items = json.items.map((item) => ({
+				title: item.title || "Untitled",
+				url: item.url,
+				external_url: item.external_url,
+				content: item.content_html || item.content_text || item.summary,
+				date: item.date_published,
+			}));
+			const isPodcast = json.items.some((i) => i.attachments?.some((a) => a.mime_type?.startsWith("audio/")));
+			return { type: "JSON Feed", isPodcast, items };
+		}
+		throw new Error("Not a standard JSON Feed.");
+	};
+
+	const init = () => {
+		const btn = document.getElementById("load-feed");
+		const urlInput = document.getElementById("feed-url");
+		const status = document.getElementById("status");
+		const output = document.getElementById("feed-output");
+
+		if (!btn || !urlInput || !status || !output) return;
+
+		btn.addEventListener("click", async () => {
+			const url = urlInput.value.trim();
+			if (!url) return;
+
+			status.style.display = "block";
+			status.innerHTML = "Fetching...";
+			status.className = "status";
+			output.innerHTML = "";
+
 			try {
-				const jsonFeed = JSON.parse(text);
-				if (jsonFeed.version && jsonFeed.version.startsWith("https://jsonfeed.org/version/")) {
-					displayJsonFeed(jsonFeed);
-					return;
+				const response = await fetch(url);
+
+				if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+
+				const blob = await response.blob();
+				const fileSize = blob.size;
+				const text = await blob.text();
+
+				let data;
+				// Determine format
+				if (text.trim().startsWith("{")) {
+					data = parseJSON(text);
+				} else {
+					data = parseXML(text);
 				}
-			} catch (e) {}
 
-			const parser = new DOMParser();
-			const xmlDoc = parser.parseFromString(text, "text/xml");
+				status.style.display = "none";
 
-			if (xmlDoc.getElementsByTagName("rss").length > 0) {
-				displayRssFeed(xmlDoc);
-			} else if (xmlDoc.getElementsByTagName("feed").length > 0) {
-				displayAtomFeed(xmlDoc);
-			} else if (xmlDoc.getElementsByTagName("rdf:RDF").length > 0) {
-				displayRdfFeed(xmlDoc);
-			} else {
-				showStatus("Unsupported feed format", "error");
+				let html = `
+                    <h2>Details</h2>
+					<table>
+						<thead><tr><th>Diagnostic</th><th>Value</th></tr></thead>
+						<tr><th>Type</th><td>${data.type}</td></tr>
+						<tr><th>Podcast</th><td>${data.isPodcast ? "🎙️ Yes" : "No"}</td></tr>
+						<tr><th>File Size</th><td>${formatSize(fileSize)}</td></tr>
+						<tr><th>Item Count</th><td>${data.items.length}</td></tr>
+					</table>
+                    <h2>Recent Items</h2>
+                `;
+
+				data.items.forEach((item) => {
+					const isExternal = !!item.external_url;
+					const displayUrl = item.external_url || item.url;
+
+					html += `
+                        <article>
+                            <h3>
+                                <a href="${displayUrl}" target="_blank" rel="noopener">${item.title}</a>
+                                ${isExternal ? "<small>EXTERNAL LINK</small>" : ""}
+                            </h3>
+                            <div>${item.date ? new Date(item.date).toLocaleString() : "No date"}</div>
+                            <details>
+                                <summary>Show Content Preview</summary>
+								${item.content}
+                            </details>
+                        </article>
+                    `;
+				});
+
+				output.innerHTML = html;
+			} catch (err) {
+				status.style.display = "block";
+				status.className = "status error";
+				if (err.message.includes("Failed to fetch")) {
+					status.innerHTML = `<strong>CORS Error:</strong> The server at this URL does not allow browser-based fetching. You may need a CORS proxy.`;
+				} else {
+					status.innerHTML = `<strong>Error:</strong> ${err.message}`;
+				}
 			}
-		} catch (error) {
-			showStatus("Error parsing feed: " + error.message, "error");
-		}
+		});
+	};
+
+	if (document.readyState === "loading") {
+		document.addEventListener("DOMContentLoaded", init);
+	} else {
+		init();
 	}
-
-	function displayRssFeed(xmlDoc) {
-		const channel = xmlDoc.getElementsByTagName("channel")[0];
-		const items = xmlDoc.getElementsByTagName("item");
-
-		if (!channel || items.length === 0) {
-			showStatus("Invalid RSS feed format", "error");
-			return;
-		}
-
-		const title = getElementText(channel, "title");
-		const description = getElementText(channel, "description");
-		const link = getElementText(channel, "link");
-		const lastBuildDate = getElementText(channel, "lastBuildDate") || getElementText(channel, "pubDate");
-
-		displayFeedInfo(title, description, link, lastBuildDate, "RSS");
-
-		const entriesDiv = document.createElement("div");
-		entriesDiv.className = "entries";
-
-		for (let i = 0; i < Math.min(items.length, 10); i++) {
-			const item = items[i];
-			const itemTitle = getElementText(item, "title");
-			const itemLink = getElementText(item, "link");
-			const itemDate = getElementText(item, "pubDate");
-			const itemDesc = getElementText(item, "description");
-
-			entriesDiv.appendChild(createEntryElement(itemTitle, itemLink, itemDate, itemDesc));
-		}
-
-		feedOutput.appendChild(entriesDiv);
-		hideStatus();
-	}
-
-	function displayAtomFeed(xmlDoc) {
-		const feed = xmlDoc.getElementsByTagName("feed")[0];
-		const entries = xmlDoc.getElementsByTagName("entry");
-
-		if (!feed || entries.length === 0) {
-			showStatus("Invalid Atom feed format", "error");
-			return;
-		}
-
-		const title = getElementText(feed, "title");
-		const subtitle = getElementText(feed, "subtitle");
-		const link = getLinkHref(feed);
-		const updated = getElementText(feed, "updated");
-
-		displayFeedInfo(title, subtitle, link, updated, "Atom");
-
-		const entriesDiv = document.createElement("div");
-		entriesDiv.className = "entries";
-
-		for (let i = 0; i < Math.min(entries.length, 10); i++) {
-			const entry = entries[i];
-			const entryTitle = getElementText(entry, "title");
-			const entryLink = getLinkHref(entry);
-			const entryDate = getElementText(entry, "updated") || getElementText(entry, "published");
-			const entryContent = getElementText(entry, "content") || getElementText(entry, "summary");
-
-			entriesDiv.appendChild(createEntryElement(entryTitle, entryLink, entryDate, entryContent));
-		}
-
-		feedOutput.appendChild(entriesDiv);
-		hideStatus();
-	}
-
-	function displayRdfFeed(xmlDoc) {
-		const channel = xmlDoc.getElementsByTagName("channel")[0];
-		const items = xmlDoc.getElementsByTagName("item");
-
-		if (!channel || items.length === 0) {
-			showStatus("Invalid RDF feed format", "error");
-			return;
-		}
-
-		const title = getElementText(channel, "title");
-		const description = getElementText(channel, "description");
-		const link = getElementText(channel, "link");
-		const date = getElementText(channel, "dc:date");
-
-		displayFeedInfo(title, description, link, date, "RDF");
-
-		const entriesDiv = document.createElement("div");
-		entriesDiv.className = "entries";
-
-		for (let i = 0; i < Math.min(items.length, 10); i++) {
-			const item = items[i];
-			const itemTitle = getElementText(item, "title");
-			const itemLink = getElementText(item, "link");
-			const itemDate = getElementText(item, "dc:date");
-			const itemDesc = getElementText(item, "description");
-
-			entriesDiv.appendChild(createEntryElement(itemTitle, itemLink, itemDate, itemDesc));
-		}
-
-		feedOutput.appendChild(entriesDiv);
-		hideStatus();
-	}
-
-	function displayJsonFeed(jsonFeed) {
-		const title = jsonFeed.title || "Untitled Feed";
-		const description = jsonFeed.description || "";
-		const link = jsonFeed.home_page_url || "";
-		const items = jsonFeed.items || [];
-
-		displayFeedInfo(title, description, link, null, "JSON");
-
-		const entriesDiv = document.createElement("div");
-		entriesDiv.className = "entries";
-
-		for (let i = 0; i < Math.min(items.length, 10); i++) {
-			const item = items[i];
-			const itemTitle = item.title || "Untitled";
-			const itemLink = item.url || "";
-			const itemDate = item.date_published || "";
-			const itemContent = item.content_html || item.content_text || "";
-
-			entriesDiv.appendChild(createEntryElement(itemTitle, itemLink, itemDate, itemContent));
-		}
-
-		feedOutput.appendChild(entriesDiv);
-		hideStatus();
-	}
-
-	function displayFeedInfo(title, description, link, date, format) {
-		const feedInfoDiv = document.createElement("div");
-		feedInfoDiv.className = "feed-info";
-
-		const titleElement = document.createElement("h2");
-		titleElement.className = "feed-title";
-
-		const titleText = document.createTextNode(title || "Untitled Feed");
-		titleElement.appendChild(titleText);
-
-		const formatBadge = document.createElement("span");
-		formatBadge.className = "format-badge";
-		formatBadge.textContent = format;
-		titleElement.appendChild(formatBadge);
-
-		feedInfoDiv.appendChild(titleElement);
-
-		if (description) {
-			const descElement = document.createElement("div");
-			descElement.className = "feed-description";
-			descElement.textContent = description;
-			feedInfoDiv.appendChild(descElement);
-		}
-
-		const metaDiv = document.createElement("div");
-		metaDiv.className = "feed-meta";
-
-		if (link) {
-			const linkElement = document.createElement("a");
-			linkElement.href = link;
-			linkElement.textContent = "Visit Website";
-			linkElement.target = "_blank";
-			metaDiv.appendChild(linkElement);
-		}
-
-		if (date) {
-			if (link) {
-				metaDiv.appendChild(document.createTextNode(" • "));
-			}
-			const dateText = document.createTextNode("Updated: " + formatDate(date));
-			metaDiv.appendChild(dateText);
-		}
-
-		feedInfoDiv.appendChild(metaDiv);
-		feedOutput.appendChild(feedInfoDiv);
-		hideStatus();
-	}
-
-	function createEntryElement(title, link, date, content) {
-		const entryDiv = document.createElement("div");
-		entryDiv.className = "entry";
-
-		const titleElement = document.createElement("h3");
-		titleElement.className = "entry-title";
-		const titleLink = document.createElement("a");
-		titleLink.href = link;
-		titleLink.textContent = title;
-		titleLink.target = "_blank";
-		titleElement.appendChild(titleLink);
-		entryDiv.appendChild(titleElement);
-
-		if (date) {
-			const dateElement = document.createElement("div");
-			dateElement.className = "entry-date";
-			dateElement.textContent = formatDate(date);
-			entryDiv.appendChild(dateElement);
-		}
-
-		if (content) {
-			const contentElement = document.createElement("div");
-			contentElement.className = "entry-content";
-			contentElement.innerHTML = content;
-			entryDiv.appendChild(contentElement);
-		}
-
-		return entryDiv;
-	}
-
-	function getElementText(parent, tagName) {
-		const element = parent.getElementsByTagName(tagName)[0];
-		return element ? element.textContent : "";
-	}
-
-	function getLinkHref(parent) {
-		const link = parent.getElementsByTagName("link")[0];
-		return link ? link.getAttribute("href") || link.textContent : "";
-	}
-
-	function formatDate(dateString) {
-		const date = new Date(dateString);
-		return isNaN(date.getTime()) ? "" : date.toLocaleString();
-	}
-
-	function showStatus(message, type) {
-		statusDiv.textContent = message;
-		statusDiv.className = `status ${type}`;
-		statusDiv.style.display = "block";
-	}
-
-	function hideStatus() {
-		statusDiv.style.display = "none";
-	}
-});
+})();
