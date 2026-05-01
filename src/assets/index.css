@@ -106,7 +106,7 @@ section ul {
 }
 
 .other-links {
-	margin-block: 8rem;
+	margin-block-start: 8rem;
 	margin-inline: -1rem;
 	text-align: center;
 	font-style: italic;

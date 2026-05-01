@@ -1,6 +1,7 @@
 ---
 title: Stoat Bio Socials
 description: Allows creating badges for social media accounts on Stoat profiles.
+tags: ["Stoat"]
 ---
 
 <div id="badge-list"></div>

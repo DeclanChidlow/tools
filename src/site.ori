@@ -18,6 +18,7 @@
       toolData/index.md ? {
         title: toolData/index.md/title
         description: toolData/index.md/description
+        tags: toolData/index.md/tags
       } : undefined
     )
   )

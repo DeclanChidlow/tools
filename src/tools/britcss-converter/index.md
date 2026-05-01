@@ -1,6 +1,7 @@
 ---
 title: BritCSS Converter
 description: Converts British spellings to functional CSS.
+tags: ["front-end development", "CSS"]
 ---
 
 <div>

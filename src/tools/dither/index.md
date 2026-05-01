@@ -1,6 +1,7 @@
 ---
 title: Dither
 description: Intentionally apply noise to simulate a broader color palette.
+tags: ["design"]
 ---
 
 <div class="container"> 
