@@ -19,6 +19,10 @@ header {
 	margin-block-start: 1rem;
 }
 
+hr {
+	margin-block: 1rem;
+}
+
 footer {
 	.support,
 	p {

@@ -1,0 +1,43 @@
+.qr-generator-wrapper {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 2rem;
+
+	@media (max-width: 45rem) {
+		display: flex;
+		flex-direction: column;
+	}
+}
+
+.form-group {
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 1rem;
+}
+
+.form-row {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 1rem;
+}
+
+.hidden {
+	display: none;
+}
+
+.canvas-container {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: white;
+	min-height: 18rem;
+	margin-bottom: 1rem;
+	overflow: hidden;
+}
+
+.download-actions-grid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 0.5rem;
+	margin-top: 1rem;
+}
