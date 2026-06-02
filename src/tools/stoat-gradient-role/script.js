@@ -4,6 +4,7 @@ const state = {
 	useStops: false,
 	angle: 90,
 	mode: "auto",
+	gradientType: "linear",
 };
 
 const DOM = {
@@ -13,6 +14,8 @@ const DOM = {
 	roleId: document.getElementById("role-id"),
 	modeRadios: document.getElementsByName("mode"),
 	autoBuilder: document.getElementById("auto-builder"),
+	gradientType: document.getElementById("gradient-type"),
+	angleLabel: document.getElementById("angle-label"),
 	colorList: document.getElementById("color-list"),
 	cssOutput: document.getElementById("css-output"),
 	previewText: document.getElementById("preview-text"),
@@ -78,11 +81,18 @@ function generateCSS() {
 
 	if (state.mode === "auto") {
 		if (state.colors.length > 1) {
-			css = `linear-gradient(${state.angle}deg, `;
 			const parts = state.colors.map((color, i) => {
 				return state.useStops ? `${color} ${state.stops[i]}%` : color;
 			});
-			css += parts.join(", ") + ")";
+			const colorString = parts.join(", ");
+
+			if (state.gradientType === "linear") {
+				css = `linear-gradient(${state.angle}deg, ${colorString})`;
+			} else if (state.gradientType === "radial") {
+				css = `radial-gradient(circle, ${colorString})`;
+			} else if (state.gradientType === "conic") {
+				css = `conic-gradient(from ${state.angle}deg, ${colorString})`;
+			}
 		} else {
 			css = state.colors[0] || "";
 		}
@@ -155,6 +165,17 @@ DOM.useStopsCb.addEventListener("change", (e) => {
 
 DOM.angleInput.addEventListener("input", (e) => {
 	state.angle = e.target.value;
+	generateCSS();
+});
+
+DOM.gradientType.addEventListener("change", (e) => {
+	state.gradientType = e.target.value;
+
+	if (state.gradientType === "radial") {
+		DOM.angleLabel.style.display = "none";
+	} else {
+		DOM.angleLabel.style.display = "block";
+	}
 	generateCSS();
 });
 
