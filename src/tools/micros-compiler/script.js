@@ -91,7 +91,7 @@ async function fetchBluesky(handle) {
 	const resolve = await fetch(`https://public.api.bsky.app/xrpc/com.atproto.identity.resolveHandle?handle=${handle}`).then((r) => r.json());
 	const did = resolve.did;
 	log("Fetching Bluesky feed...");
-	const feed = await fetch(`https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?actor=${did}&limit=10`).then((r) => r.json());
+	const feed = await fetch(`https://public.api.bsky.app/xrpc/app.bsky.feed.getAuthorFeed?actor=${did}&limit=20`).then((r) => r.json());
 	const posts = [];
 	for (let item of feed.feed) {
 		if (item.reason && item.reason.$type === "app.bsky.feed.defs#reasonRepost") continue;
@@ -131,7 +131,7 @@ async function fetchFedi(instance, username) {
 	const lookup = await fetch(`https://${instance}/api/v1/accounts/lookup?acct=${username}`).then((r) => r.json());
 	const id = lookup.id;
 	log("Fetching Fedi statuses...");
-	const statuses = await fetch(`https://${instance}/api/v1/accounts/${id}/statuses?limit=10&exclude_reblogs=true`).then((r) => r.json());
+	const statuses = await fetch(`https://${instance}/api/v1/accounts/${id}/statuses?limit=20&exclude_reblogs=true`).then((r) => r.json());
 	const filteredStatuses = statuses.filter((s) => {
 		if (!s.in_reply_to_id) return true;
 		return s.in_reply_to_account_id === id;
