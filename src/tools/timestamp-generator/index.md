@@ -54,34 +54,34 @@ description: Generates timestamps ready for use on chat platforms such as Stoat 
 <div class="output-section hidden" id="output-section">
     <h3>Format Style</h3>
     <div class="format-options">
-        <div class="format-option" data-format="t">
+        <button type="button" class="format-option" data-format="t">
             <div class="format-code">t</div>
             <div class="format-preview">1:30 PM</div>
-        </div>
-        <div class="format-option" data-format="T">
+        </button>
+        <button type="button" class="format-option" data-format="T">
             <div class="format-code">T</div>
             <div class="format-preview">13:30</div>
-        </div>
-        <div class="format-option" data-format="d">
+        </button>
+        <button type="button" class="format-option" data-format="d">
             <div class="format-code">d</div>
             <div class="format-preview">04/28/2025</div>
-        </div>
-        <div class="format-option" data-format="D">
+        </button>
+        <button type="button" class="format-option" data-format="D">
             <div class="format-code">D</div>
             <div class="format-preview">April 28, 2025</div>
-        </div>
-        <div class="format-option selected" data-format="f">
+        </button>
+        <button type="button" class="format-option selected" data-format="f">
             <div class="format-code">f</div>
             <div class="format-preview">April 28, 2025 1:30 PM</div>
-        </div>
-        <div class="format-option" data-format="F">
+        </button>
+        <button type="button" class="format-option" data-format="F">
             <div class="format-code">F</div>
             <div class="format-preview">Monday, April 28, 2025 1:30 PM</div>
-        </div>
-        <div class="format-option" data-format="R">
+        </button>
+        <button type="button" class="format-option" data-format="R">
             <div class="format-code">R</div>
             <div class="format-preview">in 2 hours</div>
-        </div>
+        </button>
     </div>
 
     <h3>Stoat/Discord Timestamp</h3>

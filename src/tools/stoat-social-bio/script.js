@@ -26,6 +26,8 @@ document.addEventListener("DOMContentLoaded", function () {
 		{ id: "reddit", name: "Reddit", icon: ":01JW4XQPENHF50ZXMTQTQ7GR25:", urlPattern: "https://www.reddit.com/user/" },
 	];
 
+	let badgeCounter = 0;
+
 	addBadgeButton.addEventListener("click", function () {
 		addBadgeForm();
 		updateOutput();
@@ -48,13 +50,25 @@ document.addEventListener("DOMContentLoaded", function () {
 		const form = document.createElement("div");
 		form.className = "badge-form";
 
+		const badgeId = badgeCounter++;
+
+		const inputLabel = document.createElement("label");
+		inputLabel.setAttribute("for", "badge-input-" + badgeId);
+		inputLabel.textContent = "Username or URL";
+
 		const input = document.createElement("input");
 		input.type = "text";
+		input.id = "badge-input-" + badgeId;
 		input.className = "badge-input";
 		input.placeholder = "Enter username or full URL";
 		input.addEventListener("input", updateOutput);
 
+		const selectLabel = document.createElement("label");
+		selectLabel.setAttribute("for", "badge-select-" + badgeId);
+		selectLabel.textContent = "Platform";
+
 		const select = document.createElement("select");
+		select.id = "badge-select-" + badgeId;
 		select.className = "badge-select";
 
 		platforms.forEach((platform) => {
@@ -74,7 +88,9 @@ document.addEventListener("DOMContentLoaded", function () {
 			updateOutput();
 		});
 
+		form.appendChild(inputLabel);
 		form.appendChild(input);
+		form.appendChild(selectLabel);
 		form.appendChild(select);
 		form.appendChild(removeButton);
 

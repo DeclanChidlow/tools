@@ -9,12 +9,13 @@ description: Fetches micro posts from Bluesky and the Fediverse and merges them.
 <div class="controls">
     <div>
         <div>
-            <label>Bluesky Handle</label>
+            <label for="bskyHandle">Bluesky Handle</label>
             <input type="text" id="bskyHandle" value="vale.rocks" />
         </div>
         <div>
-            <label>Fediverse Instance & Handle</label>
+            <label for="fediInstance">Fediverse Instance</label>
             <input type="text" id="fediInstance" value="fedi.vale.rocks" placeholder="instance.com" />
+            <label for="fediUser">Handle</label>
             <input type="text" id="fediUser" value="vale" placeholder="username" />
         </div>
         </div>

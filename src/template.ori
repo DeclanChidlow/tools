@@ -81,7 +81,6 @@
 				<p>Consider chipping in to support me financially <a href="https://vale.rocks/support" rel="payment">via a one-off or recurring payment</a>. It'll go a long way in helping me publish more writing, produce more tools, and develop more open-source projects. <em>Thank you!</em></p>
 			</div>
 			<p>Developed and maintained by <a href="http://vale.rocks">Declan Chidlow</a>. <code>${ Origami.shell('git rev-parse --short HEAD') }</code>. Last built: <code>${ new Date().toLocaleString('en-AU', { timeZone: 'UTC', hour12: false }) } UTC</code>.</p>
-	</ul>
 		</footer>
 	</body>
 </html>`
