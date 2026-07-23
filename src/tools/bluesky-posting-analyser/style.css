@@ -1,3 +1,19 @@
+.auth-status {
+	margin-block-start: 1rem;
+}
+
+.auth-status.success {
+	color: var(--green);
+}
+
+.auth-status.error {
+	color: var(--red);
+}
+
+.auth-status.info {
+	color: var(--blue);
+}
+
 .fetch-settings {
 	margin: 3rem 0;
 }

@@ -1,10 +1,14 @@
-document.getElementById("convertBtn").addEventListener("click", function () {
+const dom = {
+	convertBtn: document.getElementById("convertBtn"),
+	britishCss: document.getElementById("britishCss"),
+	standardCss: document.getElementById("standardCss"),
+};
+
+dom.convertBtn.addEventListener("click", function () {
 	try {
-		const britishCss = document.getElementById("britishCss").value;
-		const standardCss = britCSS.convertCSS(britishCss);
-		document.getElementById("standardCss").value = standardCss;
+		dom.standardCss.value = britCSS.convertCSS(dom.britishCss.value);
 	} catch (error) {
-		document.getElementById("standardCss").value = "Error: " + error.message;
+		dom.standardCss.value = "Error: " + error.message;
 		console.error("Conversion error:", error);
 	}
 });

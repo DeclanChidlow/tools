@@ -1,94 +1,39 @@
+import { $, show, hide, escapeHtml } from "/assets/helpers.js";
+
+const dom = {
+	instanceUrl: $("instance-url"),
+	email: $("email"),
+	password: $("password"),
+	fetchForm: $("fetch-token-form"),
+	mfaContainer: $("mfa-container"),
+	mfaForm: $("mfa-form"),
+	mfaTicket: $("mfa-ticket"),
+	mfaCode: $("mfa-code"),
+	mfaLabel: $("mfa-label"),
+	fetchOutput: $("fetch-output"),
+	profileContainer: $("profile-container"),
+};
+
 function getApiUrl(endpoint) {
-	const base = document.getElementById("instance-url").value.replace(/\/+$/, "");
+	const base = dom.instanceUrl.value.replace(/\/+$/, "");
 	return `${base}/${endpoint.replace(/^\/+/, "")}`;
 }
 
 function displayResult(elementId, text, type) {
-	const el = document.getElementById(elementId);
+	const el = $(elementId);
 	el.innerHTML = text;
 	el.className = `output ${type}`;
-	el.style.display = "block";
+	show(el);
 }
 
 async function handleApiResponse(response) {
 	const contentType = response.headers.get("content-type");
 	if (contentType && contentType.includes("application/json")) {
 		return await response.json();
-	} else {
-		const text = await response.text();
-		throw new Error(`Server error (${response.status}): ${text.substring(0, 120)}`);
 	}
+	const text = await response.text();
+	throw new Error(`Server error (${response.status}): ${text.substring(0, 120)}`);
 }
-
-document.getElementById("fetch-token-form").addEventListener("submit", async (e) => {
-	e.preventDefault();
-	const email = document.getElementById("email").value;
-	const password = document.getElementById("password").value;
-	const outputId = "fetch-output";
-
-	document.getElementById("mfa-container").classList.add("hidden");
-	document.getElementById("profile-container").innerHTML = "";
-	displayResult(outputId, "Authenticating...", "success");
-
-	try {
-		const response = await fetch(getApiUrl("auth/session/login"), {
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({ email, password }),
-		});
-
-		const data = await handleApiResponse(response);
-
-		if (response.ok) {
-			if (data.result === "MFA") {
-				displayResult(outputId, `2FA Required.\nAllowed methods: ${data.allowed_methods.join(", ")}`, "mfa-prompt");
-
-				document.getElementById("mfa-ticket").value = data.ticket;
-				document.getElementById("mfa-label").innerText = `Enter code (${data.allowed_methods.join("/")}):`;
-				document.getElementById("mfa-container").classList.remove("hidden");
-				document.getElementById("mfa-code").value = "";
-				document.getElementById("mfa-code").focus();
-			} else {
-				handleAuthSuccess(data);
-			}
-		} else {
-			displayResult(outputId, `Error [${response.status}]: ${data.error || JSON.stringify(data)}`, "error");
-		}
-	} catch (err) {
-		displayResult(outputId, `Authentication Error: ${err.message}`, "error");
-	}
-});
-
-document.getElementById("mfa-form").addEventListener("submit", async (e) => {
-	e.preventDefault();
-	const ticket = document.getElementById("mfa-ticket").value;
-	const code = document.getElementById("mfa-code").value.trim();
-	const outputId = "fetch-output";
-
-	displayResult(outputId, "Verifying 2FA code...", "success");
-
-	try {
-		const response = await fetch(getApiUrl("auth/session/login"), {
-			method: "POST",
-			headers: { "Content-Type": "application/json" },
-			body: JSON.stringify({
-				mfa_ticket: ticket,
-				mfa_response: { totp_code: code },
-			}),
-		});
-
-		const data = await handleApiResponse(response);
-
-		if (response.ok) {
-			document.getElementById("mfa-container").classList.add("hidden");
-			handleAuthSuccess(data);
-		} else {
-			displayResult(outputId, `2FA Error [${response.status}]: ${data.error || JSON.stringify(data)}`, "error");
-		}
-	} catch (err) {
-		displayResult(outputId, `Error during 2FA: ${err.message}`, "error");
-	}
-});
 
 function handleAuthSuccess(data) {
 	const token = data.token || data.session?.token;
@@ -97,7 +42,7 @@ function handleAuthSuccess(data) {
 		return;
 	}
 
-	displayResult("fetch-output", `SUCCESS! Session Token Generated:\n\n<code>${token}</code>`, "success");
+	displayResult("fetch-output", `SUCCESS! Session Token Generated:\n\n<code>${escapeHtml(token)}</code>`, "success");
 	fetchUserProfile(token);
 }
 
@@ -117,25 +62,88 @@ async function fetchUserProfile(token) {
 			return;
 		}
 
-		const profile = await response.json();
-		renderProfileCard(profile);
+		renderProfileCard(await response.json());
 	} catch (err) {
 		console.error("Network failure executing self profile lookup pipeline metrics:", err);
 	}
 }
 
 function renderProfileCard(user) {
-	const container = document.getElementById("profile-container");
+	const presence = user.status?.presence ?? "Invisible";
+	const statusText = user.status?.text ?? "";
 
-	const presence = user.status && user.status.presence ? user.status.presence : "Invisible";
-	const statusText = user.status && user.status.text ? user.status.text : "";
-
-	container.innerHTML = `
+	dom.profileContainer.innerHTML = `
 <pre>
-${user.username}#${user.discriminator || "Unknown"}
-User ID: ${user._id}
-Status: ${presence}
-${statusText ? `Status Text: ${statusText}` : ""}
+${escapeHtml(user.username)}#${escapeHtml(String(user.discriminator || "Unknown"))}
+User ID: ${escapeHtml(user._id)}
+Status: ${escapeHtml(presence)}
+${statusText ? `Status Text: ${escapeHtml(statusText)}` : ""}
 </pre>
 	`;
 }
+
+dom.fetchForm.addEventListener("submit", async (e) => {
+	e.preventDefault();
+	const outputId = "fetch-output";
+
+	hide(dom.mfaContainer);
+	dom.profileContainer.innerHTML = "";
+	displayResult(outputId, "Authenticating...", "success");
+
+	try {
+		const response = await fetch(getApiUrl("auth/session/login"), {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ email: dom.email.value, password: dom.password.value }),
+		});
+
+		const data = await handleApiResponse(response);
+
+		if (response.ok) {
+			if (data.result === "MFA") {
+				displayResult(outputId, `2FA Required.\nAllowed methods: ${data.allowed_methods.join(", ")}`, "mfa-prompt");
+
+				dom.mfaTicket.value = data.ticket;
+				dom.mfaLabel.textContent = `Enter code (${data.allowed_methods.join("/")}):`;
+				show(dom.mfaContainer);
+				dom.mfaCode.value = "";
+				dom.mfaCode.focus();
+			} else {
+				handleAuthSuccess(data);
+			}
+		} else {
+			displayResult(outputId, `Error [${response.status}]: ${data.error || JSON.stringify(data)}`, "error");
+		}
+	} catch (err) {
+		displayResult(outputId, `Authentication Error: ${err.message}`, "error");
+	}
+});
+
+dom.mfaForm.addEventListener("submit", async (e) => {
+	e.preventDefault();
+	const outputId = "fetch-output";
+
+	displayResult(outputId, "Verifying 2FA code...", "success");
+
+	try {
+		const response = await fetch(getApiUrl("auth/session/login"), {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				mfa_ticket: dom.mfaTicket.value,
+				mfa_response: { totp_code: dom.mfaCode.value.trim() },
+			}),
+		});
+
+		const data = await handleApiResponse(response);
+
+		if (response.ok) {
+			hide(dom.mfaContainer);
+			handleAuthSuccess(data);
+		} else {
+			displayResult(outputId, `2FA Error [${response.status}]: ${data.error || JSON.stringify(data)}`, "error");
+		}
+	} catch (err) {
+		displayResult(outputId, `Error during 2FA: ${err.message}`, "error");
+	}
+});

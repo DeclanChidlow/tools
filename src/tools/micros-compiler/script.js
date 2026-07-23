@@ -1,6 +1,14 @@
-const statusEl = document.getElementById("status");
-const outputContainer = document.getElementById("output-container");
-const log = (msg) => (statusEl.textContent = msg);
+import { $ } from "/assets/helpers.js";
+
+const dom = {
+	bskyHandle: $("bskyHandle"),
+	fediInstance: $("fediInstance"),
+	fediUser: $("fediUser"),
+	status: $("status"),
+	outputContainer: $("output-container"),
+};
+
+const log = (msg) => (dom.status.textContent = msg);
 
 function levenshtein(a, b) {
 	const matrix = [];
@@ -195,15 +203,11 @@ function formatTimestampId(date) {
 }
 
 async function generate() {
-	outputContainer.innerHTML = "";
+	dom.outputContainer.innerHTML = "";
 	log("Fetching...");
 
-	const bskyHandle = document.getElementById("bskyHandle").value;
-	const fediHost = document.getElementById("fediInstance").value;
-	const fediUser = document.getElementById("fediUser").value;
-
 	try {
-		const [bskyRaw, fediRaw] = await Promise.all([fetchBluesky(bskyHandle), fetchFedi(fediHost, fediUser)]);
+		const [bskyRaw, fediRaw] = await Promise.all([fetchBluesky(dom.bskyHandle.value), fetchFedi(dom.fediInstance.value, dom.fediUser.value)]);
 		log("Processing threads...");
 		const bskyThreads = threadPosts(bskyRaw);
 		const fediThreads = threadPosts(fediRaw);
@@ -260,7 +264,6 @@ async function generate() {
 				});
 			}
 
-			// Create UI elements
 			const block = document.createElement("div");
 			block.className = "post-block";
 
@@ -273,7 +276,7 @@ async function generate() {
 
 			block.appendChild(header);
 			block.appendChild(area);
-			outputContainer.appendChild(block);
+			dom.outputContainer.appendChild(block);
 		});
 
 		log("Done!");

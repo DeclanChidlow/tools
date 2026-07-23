@@ -41,13 +41,13 @@
 	transition: opacity 0.5s;
 }
 
-.hidden {
-	display: none;
-}
-
 .flex-row {
 	display: flex;
 	gap: 10px;
+
+	& > :is(div, label) {
+		flex: 1;
+	}
 }
 
 .timezone-selector {

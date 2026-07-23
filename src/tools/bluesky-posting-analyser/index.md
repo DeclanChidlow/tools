@@ -15,7 +15,7 @@ tags: ["Bluesky"]
             <label for="appPassword">App Password:</label>
             <input type="password" id="appPassword" placeholder="xxxx-xxxx-xxxx-xxxx" />
         </div>
-        <button onclick="authenticate()">Login</button>
+        <button id="authBtn">Login</button>
         <div id="authStatus"></div>
     </div>
     <div class="fetch-settings">
@@ -36,14 +36,14 @@ tags: ["Bluesky"]
             </select>
         </div>
         <div>
-            <button onclick="analysePosts()" id="analyseBtn" disabled>Analyse Posts</button>
+            <button id="analyseBtn" disabled>Analyse Posts</button>
         </div>
     </div>
 
-    <div id="loading" style="display: none">Loading posts...</div>
-    <div id="error" style="display: none;"></div>
+    <div id="loading" class="hidden">Loading posts...</div>
+    <div id="error" class="hidden"></div>
 
-    <div id="results" style="display: none">
+    <div id="results" class="hidden">
         <h2>Analysis Results</h2>
         <p>Details provided are based on the time posts were published, not when they received engagement.</p>
 

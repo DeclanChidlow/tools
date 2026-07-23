@@ -49,8 +49,8 @@ tags: ["Stoat"]
     			<label for="use-stops">Enable Custom Stops</label>
     		</div>
     		<label id="angle-label">Angle (°): <input type="number" id="gradient-angle" value="90" /></label>
-    		<div id="color-list"></div>
-    		<button id="add-color-btn">Add Colour</button>
+    		<div id="colour-list"></div>
+    		<button id="add-colour-btn">Add Colour</button>
     	</div>
     	<div class="form-group">
     		<label for="css-output">CSS String Output:</label>

@@ -33,7 +33,7 @@ tags: ["Stoat"]
         </form>
     </div>
 
-    <div id="fetch-output" class="output" style="display: none"></div>
+    <div id="fetch-output" class="output hidden"></div>
     <div id="profile-container"></div>
 
 </div>

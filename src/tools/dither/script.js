@@ -1,9 +1,17 @@
+import { $, show, hide } from "/assets/helpers.js";
+
+let processTimer = null;
+
+function debouncedProcess() {
+	clearTimeout(processTimer);
+	processTimer = setTimeout(process, 150);
+}
+
 const STATE = {
 	img: null,
 	blueNoise: null,
 };
 
-// Pre-defined Palettes (RGB arrays)
 const PALETTES = {
 	bw: [
 		[0, 0, 0],
@@ -51,7 +59,6 @@ const PALETTES = {
 	],
 };
 
-// Bayer Matrices
 const BAYER_4 = [
 	[0, 8, 2, 10],
 	[12, 4, 14, 6],
@@ -77,36 +84,39 @@ const bnImg = new Image();
 bnImg.src = BLUE_NOISE_URI;
 bnImg.onload = () => (STATE.blueNoise = bnImg);
 
-const ui = {
-	upload: document.getElementById("upload"),
-	width: document.getElementById("width-input"),
-	palette: document.getElementById("palette-select"),
-	algo: document.getElementById("algo-select"),
-	colorMode: document.getElementById("color-mode"),
-	amount: document.getElementById("dither-amount"),
-	amountVal: document.getElementById("amount-val"),
-	format: document.getElementById("export-format"),
-	btn: document.getElementById("process-btn"),
-	dl: document.getElementById("download-btn"),
-	canvas: document.getElementById("canvas"),
-	drop: document.getElementById("drop-zone"),
+const dom = {
+	upload: $("upload"),
+	width: $("width-input"),
+	palette: $("palette-select"),
+	algo: $("algo-select"),
+	colourMode: $("colour-mode"),
+	amount: $("dither-amount"),
+	amountVal: $("amount-val"),
+	format: $("export-format"),
+	dl: $("download-btn"),
+	preview: document.querySelector(".preview"),
+	canvas: $("canvas"),
+	drop: $("drop-zone"),
 };
 
-// --- Events ---
-ui.upload.addEventListener("change", (e) => loadFile(e.target.files[0]));
-ui.btn.addEventListener("click", process);
-ui.amount.addEventListener("input", (e) => (ui.amountVal.innerText = e.target.value));
-ui.dl.addEventListener("click", downloadOutput);
+dom.upload.addEventListener("change", (e) => loadFile(e.target.files[0]));
+dom.amount.addEventListener("input", (e) => (dom.amountVal.textContent = e.target.value));
+dom.amount.addEventListener("change", process);
+dom.dl.addEventListener("click", downloadOutput);
 
-// Drag & Drop
-ui.drop.addEventListener("dragover", (e) => {
+dom.width.addEventListener("input", debouncedProcess);
+dom.palette.addEventListener("change", process);
+dom.algo.addEventListener("change", process);
+dom.colourMode.addEventListener("change", process);
+
+dom.preview.addEventListener("dragover", (e) => {
 	e.preventDefault();
-	ui.drop.classList.add("hover");
+	dom.preview.classList.add("hover");
 });
-ui.drop.addEventListener("dragleave", () => ui.drop.classList.remove("hover"));
-ui.drop.addEventListener("drop", (e) => {
+dom.preview.addEventListener("dragleave", () => dom.preview.classList.remove("hover"));
+dom.preview.addEventListener("drop", (e) => {
 	e.preventDefault();
-	ui.drop.classList.remove("hover");
+	dom.preview.classList.remove("hover");
 	loadFile(e.dataTransfer.files[0]);
 });
 
@@ -117,6 +127,8 @@ function loadFile(file) {
 		const img = new Image();
 		img.onload = () => {
 			STATE.img = img;
+			hide(dom.drop);
+			show(dom.canvas);
 			process();
 		};
 		img.src = e.target.result;
@@ -124,34 +136,29 @@ function loadFile(file) {
 	reader.readAsDataURL(file);
 }
 
-// --- Core Processing ---
 function process() {
 	if (!STATE.img) return;
 
-	const width = parseInt(ui.width.value) || 320;
+	const width = parseInt(dom.width.value) || 320;
 	const scale = width / STATE.img.width;
 	const height = Math.floor(STATE.img.height * scale);
 
-	ui.canvas.width = width;
-	ui.canvas.height = height;
-	const ctx = ui.canvas.getContext("2d");
+	dom.canvas.width = width;
+	dom.canvas.height = height;
+	const ctx = dom.canvas.getContext("2d");
 
-	// Draw resized image
 	ctx.drawImage(STATE.img, 0, 0, width, height);
 
 	const imageData = ctx.getImageData(0, 0, width, height);
 	const data = imageData.data;
 
-	// BUG FIX: Use a Float32 buffer so error diffusion doesn't prematurely clamp to 0-255
 	const floatData = new Float32Array(data);
 
-	// Params
-	const algo = ui.algo.value;
-	const palId = ui.palette.value;
-	const isGray = ui.colorMode.value === "gray";
-	const amount = parseFloat(ui.amount.value);
+	const algo = dom.algo.value;
+	const palId = dom.palette.value;
+	const isGrey = dom.colourMode.value === "grey";
+	const amount = parseFloat(dom.amount.value);
 
-	// Prepare Blue Noise Data
 	let bnData = null;
 	if (algo === "blue" && STATE.blueNoise) {
 		const bnCanvas = document.createElement("canvas");
@@ -162,23 +169,19 @@ function process() {
 		bnData = bnCtx.getImageData(0, 0, 64, 64).data;
 	}
 
-	// --- Dithering Loop ---
 	for (let y = 0; y < height; y++) {
 		for (let x = 0; x < width; x++) {
 			const i = (y * width + x) * 4;
 
-			// 1. Get current pixel color from our float buffer
 			let r = floatData[i];
 			let g = floatData[i + 1];
 			let b = floatData[i + 2];
 
-			// 2. Pre-process: Grayscale
-			if (isGray) {
+			if (isGrey) {
 				const luma = 0.299 * r + 0.587 * g + 0.114 * b;
 				r = g = b = luma;
 			}
 
-			// 3. Apply Ordered Dither Modifier
 			if (algo === "bayer4") {
 				const mod = (BAYER_4[y % 4][x % 4] / 16 - 0.5) * 255 * amount;
 				r += mod;
@@ -200,7 +203,6 @@ function process() {
 				b += mod;
 			}
 
-			// 4. Quantize
 			let newR, newG, newB;
 
 			if (palId === "rgb") {
@@ -213,7 +215,7 @@ function process() {
 				newG = Math.round(g / 51) * 51;
 				newB = Math.round(b / 51) * 51;
 			} else {
-				const closest = findClosestColor(r, g, b, PALETTES[palId]);
+				const closest = findClosestColour(r, g, b, PALETTES[palId]);
 				newR = closest[0];
 				newG = closest[1];
 				newB = closest[2];
@@ -223,15 +225,12 @@ function process() {
 			newG = Math.max(0, Math.min(255, newG));
 			newB = Math.max(0, Math.min(255, newB));
 
-			// 5. Write Pixel to final clamp buffer
 			data[i] = newR;
 			data[i + 1] = newG;
 			data[i + 2] = newB;
 			data[i + 3] = 255;
 
-			// 6. Error Diffusion
 			if (["floyd", "atkinson", "sierra", "burkes", "stucki", "jjn"].includes(algo)) {
-				// Diffuse the un-clamped original against the clamped target
 				const errR = (r - newR) * amount;
 				const errG = (g - newG) * amount;
 				const errB = (b - newB) * amount;
@@ -306,8 +305,7 @@ function process() {
 	ctx.putImageData(imageData, 0, 0);
 }
 
-// --- Helpers ---
-function findClosestColor(r, g, b, palette) {
+function findClosestColour(r, g, b, palette) {
 	let minDist = Infinity;
 	let closest = palette[0];
 	for (let col of palette) {
@@ -337,51 +335,47 @@ function distribute(floatData, x, y, width, height, er, eg, eb, kernel) {
 function downloadOutput() {
 	if (!STATE.img) return;
 
-	const format = ui.format.value;
+	const format = dom.format.value;
 	const link = document.createElement("a");
 
-	// Handle custom GIF generation
 	if (format === "image/gif") {
 		if (typeof omggif === "undefined") {
 			alert("GIF export requires omggif library to load. Please check internet connection.");
 			return;
 		}
 
-		const width = ui.canvas.width;
-		const height = ui.canvas.height;
-		const ctx = ui.canvas.getContext("2d");
+		const width = dom.canvas.width;
+		const height = dom.canvas.height;
+		const ctx = dom.canvas.getContext("2d");
 		const imgData = ctx.getImageData(0, 0, width, height).data;
 
 		const palette = [];
 		const paletteMap = new Map();
 		const indices = new Uint8Array(width * height);
 
-		// Build palette array and mapping dynamically
 		for (let i = 0, p = 0; i < imgData.length; i += 4, p++) {
 			const r = imgData[i];
 			const g = imgData[i + 1];
 			const b = imgData[i + 2];
-			const hexColor = (r << 16) | (g << 8) | b;
+			const hexColour = (r << 16) | (g << 8) | b;
 
-			let idx = paletteMap.get(hexColor);
+			let idx = paletteMap.get(hexColour);
 			if (idx === undefined) {
 				if (palette.length < 256) {
 					idx = palette.length;
-					palette.push(hexColor);
-					paletteMap.set(hexColor, idx);
+					palette.push(hexColour);
+					paletteMap.set(hexColour, idx);
 				} else {
-					idx = 0; // Fallback if image has >256 colors
+					idx = 0;
 				}
 			}
 			indices[p] = idx;
 		}
 
-		// Pad palette length to powers of 2 for strict GIF compliance
 		let palSize = 2;
 		while (palSize < palette.length) palSize *= 2;
 		while (palette.length < palSize) palette.push(0);
 
-		// Buffer needs extra room for headers
 		const buffer = new Uint8Array(width * height + 1024 + palette.length * 3);
 		const gif = new omggif.GifWriter(buffer, width, height, { palette: palette });
 		gif.addFrame(0, 0, width, height, indices);
@@ -390,8 +384,7 @@ function downloadOutput() {
 		link.href = URL.createObjectURL(blob);
 		link.download = "dithered.gif";
 	} else {
-		// Native format support (PNG, WEBP, JPEG)
-		link.href = ui.canvas.toDataURL(format, 1.0);
+		link.href = dom.canvas.toDataURL(format, 1.0);
 		const ext = format.split("/")[1];
 		link.download = `dithered.${ext}`;
 	}

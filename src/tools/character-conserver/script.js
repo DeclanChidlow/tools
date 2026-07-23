@@ -1,6 +1,15 @@
+import { $, escapeHtml } from "/assets/helpers.js";
+
+const dom = {
+	convertBtn: $("convertBtn"),
+	originalText: $("originalText"),
+	aggressiveMode: $("aggressiveMode"),
+	shortenedText: $("shortenedText"),
+	stats: $("stats"),
+};
+
 const textShortener = {
 	conservativeReplacements: {
-		// Typography improvements
 		"...": "…",
 		"--": "—",
 		"->": "→",
@@ -23,7 +32,6 @@ const textShortener = {
 		"3/8": "⅜",
 		"5/8": "⅝",
 		"7/8": "⅞",
-		// Common symbol replacements
 		" degrees": "°",
 		" degree": "°",
 		"degrees ": "° ",
@@ -34,7 +42,6 @@ const textShortener = {
 		" per cent": "%",
 		"percent ": "% ",
 		"per cent ": "% ",
-		// Number replacements
 		" first": " 1st",
 		" second": " 2nd",
 		" third": " 3rd",
@@ -99,7 +106,7 @@ const textShortener = {
 		"message": "msg",
 		"picture": "pic",
 		"follow": "flw",
-		"favorite": "fav",
+		"favourite": "fav",
 		"versus": "vs",
 		"against": "vs",
 		"should": "shld",
@@ -116,7 +123,7 @@ const textShortener = {
 		"create": "cre8",
 	},
 
-	convertText: function (text, aggressive = false) {
+	convertText(text, aggressive = false) {
 		if (!text || typeof text !== "string") {
 			throw new Error("Please provide valid text to convert");
 		}
@@ -128,61 +135,43 @@ const textShortener = {
 			const isWord = /[a-zA-Z]/.test(original);
 
 			if (isWord) {
-				// Word replacement
 				const regex = new RegExp("\\b" + original.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "\\b", "gi");
 				result = result.replace(regex, replacement);
 			} else {
-				// Symbol replacement
 				const regex = new RegExp(original.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "g");
 				result = result.replace(regex, replacement);
 			}
 		}
 
-		result = result.replace(/\s+/g, " ").trim();
-
-		return result;
+		return result.replace(/\s+/g, " ").trim();
 	},
 
-	getCharacterCount: function (text) {
-		return text.length;
-	},
-
-	getSavings: function (original, shortened) {
+	getSavings(original, shortened) {
 		const saved = original.length - shortened.length;
 		return {
-			originalLength: original.length,
-			shortenedLength: shortened.length,
 			charactersSaved: saved,
 			percentageSaved: original.length > 0 ? Math.round((saved / original.length) * 100) : 0,
 		};
 	},
-
-	previewBoth: function (text) {
-		return {
-			conservative: this.convertText(text, false),
-			aggressive: this.convertText(text, true),
-		};
-	},
 };
 
-document.getElementById("convertBtn").addEventListener("click", function () {
+dom.convertBtn.addEventListener("click", function () {
 	try {
-		const originalText = document.getElementById("originalText").value;
-		const aggressiveMode = document.getElementById("aggressiveMode").checked;
-		const shortenedText = textShortener.convertText(originalText, aggressiveMode);
+		const originalText = dom.originalText.value;
+		const shortenedText = textShortener.convertText(originalText, dom.aggressiveMode.checked);
 		const stats = textShortener.getSavings(originalText, shortenedText);
 
-		document.getElementById("shortenedText").value = shortenedText;
+		dom.shortenedText.value = shortenedText;
 
-		document.getElementById("stats").innerHTML = `
+		dom.stats.innerHTML = `
 			<p><strong>Statistics:</strong></p>
-			<p>Original: ${stats.originalLength} characters</p>
-			<p>Shortened: ${stats.shortenedLength} characters</p>
+			<p>Original: ${originalText.length} characters</p>
+			<p>Shortened: ${shortenedText.length} characters</p>
 			<p>Saved: ${stats.charactersSaved} characters (${stats.percentageSaved}%)</p>
 		`;
 	} catch (error) {
-		document.getElementById("shortenedText").value = "Error: " + error.message;
-		document.getElementById("stats").innerHTML = "";
+		dom.shortenedText.value = "Error: " + error.message;
+		dom.stats.innerHTML = "";
 		console.error("Conversion error:", error);
 	}
 });

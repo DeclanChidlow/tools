@@ -1,10 +1,28 @@
+import { $, show, hide, escapeHtml } from "/assets/helpers.js";
+
+const dom = {
+	authHandle: $("authHandle"),
+	appPassword: $("appPassword"),
+	authBtn: $("authBtn"),
+	authStatus: $("authStatus"),
+	targetHandle: $("targetHandle"),
+	postLimit: $("postLimit"),
+	analyseBtn: $("analyseBtn"),
+	loading: $("loading"),
+	error: $("error"),
+	results: $("results"),
+	dayResults: $("dayResults"),
+	hourResults: $("hourResults"),
+	stats: $("stats"),
+};
+
 let postsData = [];
 let authToken = null;
 let authDid = null;
 
 async function authenticate() {
-	const handle = document.getElementById("authHandle").value.trim();
-	const password = document.getElementById("appPassword").value.trim();
+	const handle = dom.authHandle.value.trim();
+	const password = dom.appPassword.value.trim();
 
 	if (!handle || !password) {
 		setAuthStatus("Please enter both handle and app password", "error");
@@ -37,23 +55,22 @@ async function authenticate() {
 		authDid = data.did;
 
 		setAuthStatus(`Authenticated as ${data.handle}`, "success");
-		document.getElementById("analyseBtn").disabled = false;
+		dom.analyseBtn.disabled = false;
 	} catch (error) {
 		setAuthStatus(`Authentication failed: ${error.message}`, "error");
 		authToken = null;
 		authDid = null;
-		document.getElementById("analyseBtn").disabled = true;
+		dom.analyseBtn.disabled = true;
 	}
 }
 
 function setAuthStatus(message, type) {
-	const statusEl = document.getElementById("authStatus");
-	statusEl.textContent = message;
-	statusEl.style.color = type === "success" ? "var(--green_" : type === "error" ? "var(--red)" : "var(--blue)";
+	dom.authStatus.textContent = message;
+	dom.authStatus.className = "auth-status " + type;
 }
 
 async function analysePosts() {
-	const handle = document.getElementById("targetHandle").value.trim();
+	const handle = dom.targetHandle.value.trim();
 	if (!handle) {
 		showError("Please enter a target Bluesky handle");
 		return;
@@ -103,9 +120,8 @@ async function fetchPosts(handle) {
 		const resolveData = await resolveResponse.json();
 		const userDid = resolveData.did;
 
-		const postLimit = parseInt(document.getElementById("postLimit").value);
+		const postLimit = parseInt(dom.postLimit.value);
 
-		// For large requests, we may need to paginate
 		postsData = [];
 		let cursor = null;
 		let fetchedCount = 0;
@@ -145,7 +161,6 @@ async function fetchPosts(handle) {
 			postsData = postsData.concat(batch);
 			fetchedCount += batch.length;
 
-			// Check if there are more posts to fetch
 			if (data.cursor && fetchedCount < postLimit) {
 				cursor = data.cursor;
 				await new Promise((resolve) => setTimeout(resolve, 100));
@@ -159,7 +174,6 @@ async function fetchPosts(handle) {
 }
 
 async function fetchEngagementData() {
-	// Batch fetch engagement data for posts
 	const batchSize = 10;
 	const batches = [];
 
@@ -171,7 +185,6 @@ async function fetchEngagementData() {
 		await Promise.all(
 			batch.map(async (post) => {
 				try {
-					// Get post thread to get reply count and engagement
 					const threadResponse = await fetch(`https://bsky.social/xrpc/app.bsky.feed.getPostThread?uri=${encodeURIComponent(post.uri)}`, {
 						headers: {
 							Authorization: `Bearer ${authToken}`,
@@ -188,7 +201,6 @@ async function fetchEngagementData() {
 					}
 				} catch (error) {
 					console.warn(`Failed to fetch engagement for post: ${error.message}`);
-					// Keep default values of 0
 				}
 			}),
 		);
@@ -202,7 +214,6 @@ function analysePostingPatterns() {
 	const hourStats = {};
 	const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
-	// Initialise stats
 	for (let i = 0; i < 7; i++) {
 		dayStats[dayNames[i]] = { posts: 0, totalEngagement: 0, avgEngagement: 0 };
 	}
@@ -210,7 +221,6 @@ function analysePostingPatterns() {
 		hourStats[i] = { posts: 0, totalEngagement: 0, avgEngagement: 0 };
 	}
 
-	// Analyse each post
 	postsData.forEach((post) => {
 		const date = new Date(post.createdAt);
 		const dayOfWeek = dayNames[date.getDay()];
@@ -224,7 +234,6 @@ function analysePostingPatterns() {
 		hourStats[hour].totalEngagement += engagement;
 	});
 
-	// Calculate averages
 	Object.keys(dayStats).forEach((day) => {
 		if (dayStats[day].posts > 0) {
 			dayStats[day].avgEngagement = dayStats[day].totalEngagement / dayStats[day].posts;
@@ -251,15 +260,15 @@ function displayDayResults(dayStats) {
 
 	sortedDays.forEach(([day, stats]) => {
 		html += `<tr>
-                    <td><strong>${day}</strong></td>
-                    <td>${stats.posts}</td>
-                    <td>${stats.avgEngagement.toFixed(1)}</td>
-                    <td>${stats.totalEngagement}</td>
-                </tr>`;
+			<td><strong>${day}</strong></td>
+			<td>${stats.posts}</td>
+			<td>${stats.avgEngagement.toFixed(1)}</td>
+			<td>${stats.totalEngagement}</td>
+		</tr>`;
 	});
 
 	html += "</table>";
-	document.getElementById("dayResults").innerHTML = html;
+	dom.dayResults.innerHTML = html;
 }
 
 function displayHourResults(hourStats) {
@@ -273,15 +282,15 @@ function displayHourResults(hourStats) {
 		const displayHour = `${hour.toString().padStart(2, "0")}:00`;
 
 		html += `<tr>
-                    <td><strong>${displayHour}</strong></td>
-                    <td>${stats.posts}</td>
-                    <td>${stats.avgEngagement.toFixed(1)}</td>
-                    <td>${stats.totalEngagement}</td>
-                </tr>`;
+			<td><strong>${displayHour}</strong></td>
+			<td>${stats.posts}</td>
+			<td>${stats.avgEngagement.toFixed(1)}</td>
+			<td>${stats.totalEngagement}</td>
+		</tr>`;
 	});
 
 	html += "</table>";
-	document.getElementById("hourResults").innerHTML = html;
+	dom.hourResults.innerHTML = html;
 }
 
 function displayStats() {
@@ -291,34 +300,39 @@ function displayStats() {
 	const totalReplies = postsData.reduce((sum, post) => sum + post.replies, 0);
 	const avgEngagement = totalPosts > 0 ? (totalLikes + totalReposts + totalReplies) / totalPosts : 0;
 
-	const html = `
-                <p><strong>Total Posts Analysed:</strong> ${totalPosts}</p>
-                <p><strong>Total Likes:</strong> ${totalLikes}</p>
-                <p><strong>Total Reposts:</strong> ${totalReposts}</p>
-                <p><strong>Total Replies:</strong> ${totalReplies}</p>
-                <p><strong>Average Engagement per Post:</strong> ${avgEngagement.toFixed(1)}</p>
-            `;
-
-	document.getElementById("stats").innerHTML = html;
+	dom.stats.innerHTML = `
+		<p><strong>Total Posts Analysed:</strong> ${totalPosts}</p>
+		<p><strong>Total Likes:</strong> ${totalLikes}</p>
+		<p><strong>Total Reposts:</strong> ${totalReposts}</p>
+		<p><strong>Total Replies:</strong> ${totalReplies}</p>
+		<p><strong>Average Engagement per Post:</strong> ${avgEngagement.toFixed(1)}</p>
+	`;
 }
 
-function showLoading(show) {
-	document.getElementById("loading").style.display = show ? "block" : "none";
+function showLoading(visible) {
+	if (visible) {
+		show(dom.loading);
+	} else {
+		hide(dom.loading);
+	}
 }
 
 function showError(message) {
-	document.getElementById("error").innerHTML = message.replace(/\n/g, "<br>");
-	document.getElementById("error").style.display = "block";
+	dom.error.innerHTML = escapeHtml(message).replace(/\n/g, "<br>");
+	show(dom.error);
 }
 
 function hideError() {
-	document.getElementById("error").style.display = "none";
+	hide(dom.error);
 }
 
 function showResults() {
-	document.getElementById("results").style.display = "block";
+	show(dom.results);
 }
 
 function hideResults() {
-	document.getElementById("results").style.display = "none";
+	hide(dom.results);
 }
+
+dom.authBtn.addEventListener("click", authenticate);
+dom.analyseBtn.addEventListener("click", analysePosts);

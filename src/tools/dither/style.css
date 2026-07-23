@@ -9,6 +9,11 @@ input[type="file"] {
 	max-inline-size: 20rem;
 }
 
+.controls hr {
+	border-color: #444;
+	margin: 15px 0;
+}
+
 .preview {
 	flex: 1;
 }

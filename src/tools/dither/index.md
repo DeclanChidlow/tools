@@ -1,13 +1,13 @@
 ---
 title: Dither
-description: Intentionally apply noise to simulate a broader color palette.
+description: Intentionally apply noise to simulate a broader colour palette.
 tags: ["design"]
 ---
 
 <div class="container"> 
     <div class="controls">
         <div class="control-group">
-            <label for="upload">1. Input Image</label>
+            <label for="upload">Input Image</label>
             <input type="file" id="upload" accept="image/*" />
         </div>
 
@@ -16,10 +16,10 @@ tags: ["design"]
             <input type="number" id="width-input" value="320" min="1" />
         </div>
 
-        <hr style="border-color: #444; margin: 15px 0" />
+        <hr />
 
         <div class="control-group">
-            <label for="palette-select">2. Palette</label>
+            <label for="palette-select">Palette</label>
             <select id="palette-select">
                 <option value="bw">1-Bit Black & White</option>
                 <option value="gb">GameBoy (4 Greens)</option>
@@ -55,10 +55,10 @@ tags: ["design"]
         </div>
 
         <div class="control-group">
-            <label for="color-mode">Pre-Process</label>
-            <select id="color-mode">
-                <option value="color">Normal (Color)</option>
-                <option value="gray">Grayscale</option>
+            <label for="colour-mode">Pre-Process</label>
+            <select id="colour-mode">
+                <option value="colour">Normal (Colour)</option>
+                <option value="grey">Greyscale</option>
             </select>
         </div>
 
@@ -70,7 +70,7 @@ tags: ["design"]
             <input type="range" id="dither-amount" min="0" max="1" step="0.05" value="1.0" />
         </div>
 
-        <hr style="border-color: #444; margin: 15px 0" />
+        <hr />
 
         <div class="control-group">
             <label for="export-format">Export Format</label>
@@ -82,14 +82,13 @@ tags: ["design"]
             </select>
         </div>
 
-        <button id="process-btn">Update Preview</button>
         <button id="download-btn" class="secondary">Download Image</button>
 
     </div>
 
     <div class="preview">
         <div id="drop-zone">Drag & Drop Image Here</div>
-        <canvas id="canvas"></canvas>
+        <canvas id="canvas" class="hidden"></canvas>
     </div>
 
 </div>

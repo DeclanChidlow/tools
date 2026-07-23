@@ -1,16 +1,21 @@
-async function transcribe() {
-	const apiKey = document.getElementById("apiKey").value;
-	const fileInput = document.getElementById("audioFile");
-	const transcriptionDiv = document.getElementById("transcription");
-	transcriptionDiv.innerHTML = "⏳ Transcribing...";
+import { $ } from "/assets/helpers.js";
 
-	if (!apiKey || !fileInput.files.length) {
+const dom = {
+	apiKey: $("apiKey"),
+	audioFile: $("audioFile"),
+	transcription: $("transcription"),
+};
+
+async function transcribe() {
+	dom.transcription.innerHTML = "⏳ Transcribing...";
+
+	if (!dom.apiKey.value || !dom.audioFile.files.length) {
 		alert("Please provide both API key and MP3 file.");
 		return;
 	}
 
 	const formData = new FormData();
-	formData.append("file", fileInput.files[0]);
+	formData.append("file", dom.audioFile.files[0]);
 	formData.append("model", "whisper-1");
 	formData.append("response_format", "text");
 
@@ -18,7 +23,7 @@ async function transcribe() {
 		const response = await fetch("https://api.openai.com/v1/audio/transcriptions", {
 			method: "POST",
 			headers: {
-				Authorization: `Bearer ${apiKey}`,
+				Authorization: `Bearer ${dom.apiKey.value}`,
 			},
 			body: formData,
 		});
@@ -28,11 +33,9 @@ async function transcribe() {
 			throw new Error(`Error: ${response.status} - ${errText}`);
 		}
 
-		const transcriptText = await response.text();
-
-		transcriptionDiv.innerHTML = transcriptText;
+		dom.transcription.textContent = await response.text();
 	} catch (error) {
-		transcriptionDiv.innerHTML = `<span style="color: red;">❌ ${error.message}</span>`;
+		dom.transcription.innerHTML = `<span class="error">❌ ${error.message}</span>`;
 	}
 }
 

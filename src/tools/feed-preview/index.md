@@ -9,5 +9,5 @@ description: Preview the contents of an RSS, Atom, or JSON feed.
     <button id="load-feed">Load Feed</button>
 </div>
 
-<div id="status" class="status" style="display: none"></div>
+<div id="status" class="status hidden"></div>
 <div id="feed-output" class="readable"></div>

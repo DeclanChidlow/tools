@@ -13,11 +13,11 @@ description: Generates timestamps ready for use on chat platforms such as Stoat 
 
 <div class="tab-content active" id="standard-tab">
     <div class="flex-row">
-        <div style="flex: 1">
+        <div>
             <label for="date-input">Date</label>
             <input type="date" id="date-input" />
         </div>
-        <div style="flex: 1">
+        <div>
             <label for="time-input">Time</label>
             <input type="time" id="time-input" />
         </div>

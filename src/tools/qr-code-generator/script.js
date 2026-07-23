@@ -1,28 +1,27 @@
 import QRCode from "https://esm.sh/qrcode";
+import { $, show, hide } from "/assets/helpers.js";
 
 const dom = {
-	typeSelect: document.getElementById("qrContentType"),
+	typeSelect: $("qrContentType"),
 	sections: document.querySelectorAll(".type-group"),
-	generateBtn: document.getElementById("generateBtn"),
-	canvas: document.getElementById("qrCanvas"),
-	rawString: document.getElementById("qrRawString"),
-	contrastWarning: document.getElementById("contrastWarning"),
-
-	downloadPngBtn: document.getElementById("downloadPngBtn"),
-	downloadJpegBtn: document.getElementById("downloadJpegBtn"),
-	downloadSvgBtn: document.getElementById("downloadSvgBtn"),
-
-	ecl: document.getElementById("qrErrorCorrection"),
-	margin: document.getElementById("qrMargin"),
-	fgColor: document.getElementById("qrFgColor"),
-	bgColor: document.getElementById("qrBgColor"),
-	width: document.getElementById("qrWidth"),
+	generateBtn: $("generateBtn"),
+	canvas: $("qrCanvas"),
+	rawString: $("qrRawString"),
+	contrastWarning: $("contrastWarning"),
+	downloadPngBtn: $("downloadPngBtn"),
+	downloadJpegBtn: $("downloadJpegBtn"),
+	downloadSvgBtn: $("downloadSvgBtn"),
+	ecl: $("qrErrorCorrection"),
+	margin: $("qrMargin"),
+	fgColor: $("qrFgColor"),
+	bgColor: $("qrBgColor"),
+	width: $("qrWidth"),
 };
 
 dom.typeSelect.addEventListener("change", (e) => {
-	dom.sections.forEach((sec) => sec.classList.add("hidden"));
-	const targetSection = document.getElementById(`type-${e.target.value}`);
-	if (targetSection) targetSection.classList.remove("hidden");
+	dom.sections.forEach((sec) => hide(sec));
+	const targetSection = $(`type-${e.target.value}`);
+	if (targetSection) show(targetSection);
 });
 
 function getFormattedData() {
@@ -30,34 +29,34 @@ function getFormattedData() {
 
 	switch (type) {
 		case "url":
-			return document.getElementById("val-url").value.trim();
+			return $("val-url").value.trim();
 		case "text":
-			return document.getElementById("val-text").value;
+			return $("val-text").value;
 		case "phone":
-			const phoneNum = document.getElementById("val-phone").value.trim();
+			const phoneNum = $("val-phone").value.trim();
 			return phoneNum ? `tel:${phoneNum}` : "";
 		case "geo":
-			const lat = document.getElementById("val-geo-lat").value.trim();
-			const lon = document.getElementById("val-geo-lon").value.trim();
+			const lat = $("val-geo-lat").value.trim();
+			const lon = $("val-geo-lon").value.trim();
 			return lat && lon ? `geo:${lat},${lon}` : "";
 		case "wifi":
-			const ssid = document.getElementById("val-wifi-ssid").value.replace(/([\\;:])/g, "\\$1");
-			const pass = document.getElementById("val-wifi-pass").value.replace(/([\\;:])/g, "\\$1");
-			const enc = document.getElementById("val-wifi-type").value;
+			const ssid = $("val-wifi-ssid").value.replace(/([\\;:])/g, "\\$1");
+			const pass = $("val-wifi-pass").value.replace(/([\\;:])/g, "\\$1");
+			const enc = $("val-wifi-type").value;
 			return `WIFI:S:${ssid};T:${enc};P:${pass};;`;
 		case "vcard":
-			const fn = document.getElementById("val-vc-first").value.trim();
-			const ln = document.getElementById("val-vc-last").value.trim();
-			const phone = document.getElementById("val-vc-phone").value.trim();
-			const email = document.getElementById("val-vc-email").value.trim();
+			const fn = $("val-vc-first").value.trim();
+			const ln = $("val-vc-last").value.trim();
+			const phone = $("val-vc-phone").value.trim();
+			const email = $("val-vc-email").value.trim();
 			return `BEGIN:VCARD\nVERSION:3.0\nN:${ln};${fn};;;\nFN:${fn} ${ln}\nTEL;TYPE=cell:${phone}\nEMAIL:${email}\nEND:VCARD`;
 		case "email":
-			const to = document.getElementById("val-email-to").value.trim();
-			const sub = document.getElementById("val-email-sub").value;
+			const to = $("val-email-to").value.trim();
+			const sub = $("val-email-sub").value;
 			return `mailto:${to}?subject=${encodeURIComponent(sub)}`;
 		case "sms":
-			const smsNum = document.getElementById("val-sms-phone").value.trim();
-			const smsMsg = document.getElementById("val-sms-msg").value;
+			const smsNum = $("val-sms-phone").value.trim();
+			const smsMsg = $("val-sms-msg").value;
 			return `smsto:${smsNum}:${smsMsg}`;
 		default:
 			return "";
@@ -116,9 +115,9 @@ dom.generateBtn.addEventListener("click", async () => {
 
 		const ratio = checkContrast(dom.fgColor.value, dom.bgColor.value);
 		if (ratio < 3.0) {
-			dom.contrastWarning.classList.remove("hidden");
+			show(dom.contrastWarning);
 		} else {
-			dom.contrastWarning.classList.add("hidden");
+			hide(dom.contrastWarning);
 		}
 
 		await QRCode.toCanvas(dom.canvas, data, getQrOptions());

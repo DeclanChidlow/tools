@@ -21,10 +21,6 @@
 	gap: 1rem;
 }
 
-.hidden {
-	display: none;
-}
-
 .canvas-container {
 	display: flex;
 	justify-content: center;
