@@ -61,8 +61,10 @@ tags: ["Stoat"]
     <hr>
 
     <h2>Preview</h2>
-    <div class="preview-box">
-    	<span id="preview-text">Example Username</span>
+    <p>How your gradient role will look on both white and black backgrounds.</p>
+    <div id="preview-box">
+    	<span class="black-bg">Example Username</span>
+    	<span class="white-bg">Example Username</span>
     </div>
 
     <button id="submit-btn">Update Role Colour</button>

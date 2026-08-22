@@ -11,7 +11,8 @@ tags: ["Stoat"]
 <hr>
 
 <div class="badge-preview">
-    <h3>Output:</h3>
+    <h3>Output</h3>
+    <p>You can copy this output markdown into your Stoat bio to display it on your profile.</p>
     <pre class="badge-code" id="badge-output"></pre>
     <button id="copy-markdown" class="copy-button">Copy Output</button>
     <span id="copy-success" class="success-message">Copied!</span>

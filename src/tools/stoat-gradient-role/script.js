@@ -20,7 +20,7 @@ const dom = {
 	angleLabel: $("angle-label"),
 	colourList: $("colour-list"),
 	cssOutput: $("css-output"),
-	previewText: $("preview-text"),
+	previewSpans: document.querySelectorAll("#preview-box span"),
 	submitBtn: $("submit-btn"),
 	addColourStopBtn: $("add-colour-btn"),
 	useStopsCb: $("use-stops"),
@@ -108,7 +108,9 @@ function generateCSS() {
 }
 
 function applyPreview(cssString) {
-	dom.previewText.style.background = cssString;
+	dom.previewSpans.forEach((span) => {
+		span.style.background = cssString;
+	});
 }
 
 async function submitRoleUpdate() {

@@ -20,13 +20,17 @@ div:has(> input[type="radio"]) {
 	margin-bottom: 8px;
 }
 
-.preview-box {
+#preview-box {
 	margin-block: 1rem;
 	font-weight: bold;
-}
+	inline-size: fit-content;
+	padding-inline: 1rem;
+	background: linear-gradient(to bottom, black 50%, white 50%);
 
-#preview-text {
-	background-clip: text;
-	-webkit-background-clip: text;
-	color: transparent;
+	span {
+		display: block;
+		background-clip: text !important;
+		-webkit-background-clip: text !important;
+		color: transparent;
+	}
 }
