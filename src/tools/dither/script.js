@@ -176,6 +176,15 @@ function process() {
 			let r = floatData[i];
 			let g = floatData[i + 1];
 			let b = floatData[i + 2];
+			let a = floatData[i + 3];
+
+			if (a === 0) {
+				data[i] = 0;
+				data[i + 1] = 0;
+				data[i + 2] = 0;
+				data[i + 3] = 0;
+				continue;
+			}
 
 			if (isGrey) {
 				const luma = 0.299 * r + 0.587 * g + 0.114 * b;
@@ -228,7 +237,7 @@ function process() {
 			data[i] = newR;
 			data[i + 1] = newG;
 			data[i + 2] = newB;
-			data[i + 3] = 255;
+			data[i + 3] = a;
 
 			if (["floyd", "atkinson", "sierra", "burkes", "stucki", "jjn"].includes(algo)) {
 				const errR = (r - newR) * amount;
